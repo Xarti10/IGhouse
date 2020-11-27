@@ -2,7 +2,7 @@
 #define IGHOUSE_HUMIDITYSENSOR_HPP
 
 #include "DhtSensorType.hpp"
-#include "../../Utils/TypeDefinitions.h"
+#include "../../Utils/TypeDefinitions.hpp"
 
 
 namespace IGHouse

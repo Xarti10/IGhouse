@@ -1,4 +1,4 @@
-#include "Measurement.h"
+#include "Measurement.hpp"
 
 namespace IGHouse
 {

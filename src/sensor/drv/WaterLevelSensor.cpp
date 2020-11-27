@@ -1,4 +1,4 @@
-#include "WaterLeverSensor.hpp"
+#include "WaterLevelSensor.hpp"
 
 namespace IGHouse
 {
@@ -7,18 +7,18 @@ namespace Sensor
 namespace Drv
 {
 
-WaterLeverSensor::WaterLeverSensor(MeasurementType measType)
+WaterLevelSensor::WaterLevelSensor(MeasurementType measType)
         : Sensor(measType)
 {
 
 }
 
-void WaterLeverSensor::measure()
+void WaterLevelSensor::measure()
 {
 //TODO implementation
 }
 
-void WaterLeverSensor::initSensor()
+void WaterLevelSensor::initSensor()
 {
 //TODO implementation
 }

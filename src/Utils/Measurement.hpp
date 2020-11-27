@@ -1,7 +1,7 @@
-#ifndef IGHOUSE_MEASUREMENT_H
-#define IGHOUSE_MEASUREMENT_H
+#ifndef IGHOUSE_MEASUREMENT_HPP
+#define IGHOUSE_MEASUREMENT_HPP
 
-#include "TypeDefinitions.h"
+#include "TypeDefinitions.hpp"
 
 namespace IGHouse
 {
@@ -21,4 +21,4 @@ private:
 };
 
 }//namespace IGHouse
-#endif //IGHOUSE_MEASUREMENT_H
+#endif //IGHOUSE_MEASUREMENT_HPP

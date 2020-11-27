@@ -1,5 +1,5 @@
 #include "TemperatureSensor.hpp"
-#include "../../Utils/TypeDefinitions.h"
+#include "../../Utils/TypeDefinitions.hpp"
 #include "DHT.h"
 
 namespace IGHouse

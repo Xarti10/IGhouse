@@ -4,24 +4,22 @@
 #include <map>
 #include <memory>
 
-#include "../Utils/TypeDefinitions.h"
+#include "../Utils/TypeDefinitions.hpp"
 #include "SensorInterface.hpp"
 
 namespace IGHouse
 {
 
-typedef std::map<MeasurementType, std::shared_ptr<Sensor::SensorInterface>> SensorRepositoryMap;
-
-
-class SensorRepository {
+class SensorRepository
+{
 public:
     SensorRepository();
 
-    SensorRepositoryMap getSensorRepo();
+    typedef std::map<MeasurementType, std::shared_ptr<Sensor::SensorInterface>> SensorRepositoryMap;
+    SensorRepositoryMap getSensorMap();
     std::shared_ptr<Sensor::SensorInterface> findSensor(MeasurementType measType);
-//    TODO implement all methods
 private:
-    SensorRepositoryMap sensorRepo;
+    SensorRepositoryMap sensorMap;
 
     void createSensors();
 };

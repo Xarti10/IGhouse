@@ -31,8 +31,10 @@ add_custom_target(
 )
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/sensor)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/mechanism)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/handlers)
 
-set(SOURCES ${SENSOR_SRC})
+set(SOURCES ${SENSOR_SRC} ${MECHANISM_SRC} ${HANDLERS_SRC})
 
 add_executable(Z_DUMMY_TARGET ${SRC_LIST} ${SOURCES})
 

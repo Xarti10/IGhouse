@@ -1,5 +1,5 @@
-#ifndef IGHOUSE_TYPEDEFINITIONS_H
-#define IGHOUSE_TYPEDEFINITIONS_H
+#ifndef IGHOUSE_TYPEDEFINITIONS_HPP
+#define IGHOUSE_TYPEDEFINITIONS_HPP
 
 #include <cstdint>
 
@@ -29,4 +29,4 @@ enum class MeasurementType : std::uint8_t
 
 }//namespace IGHouse
 
-#endif //IGHOUSE_TYPEDEFINITIONS_H
+#endif //IGHOUSE_TYPEDEFINITIONS_HPP

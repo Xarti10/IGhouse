@@ -21,8 +21,6 @@ public:
     virtual void measure() = 0;
 
 private:
-    static constexpr std::uint8_t dhtPin = 15;
-
     void initSensor() override;
 
 protected:

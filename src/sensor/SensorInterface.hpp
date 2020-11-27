@@ -1,8 +1,8 @@
 #ifndef IGHOUSE_SENSORINTERFACE_HPP
 #define IGHOUSE_SENSORINTERFACE_HPP
 
-#include "../Utils/TypeDefinitions.h"
-#include "../Utils/Measurement.h"
+#include "../Utils/TypeDefinitions.hpp"
+#include "../Utils/Measurement.hpp"
 #include <memory>
 
 namespace IGHouse

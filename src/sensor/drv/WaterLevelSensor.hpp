@@ -1,5 +1,5 @@
-#ifndef IGHOUSE_WATERLEVERSENSOR_HPP
-#define IGHOUSE_WATERLEVERSENSOR_HPP
+#ifndef IGHOUSE_WATERLEVELSENSOR_HPP
+#define IGHOUSE_WATERLEVELSENSOR_HPP
 
 #include "../Sensor.hpp"
 
@@ -10,11 +10,11 @@ namespace Sensor
 namespace Drv
 {
 
-class WaterLeverSensor : public Sensor
+class WaterLevelSensor : public Sensor
 {
 public:
-    WaterLeverSensor() = delete;
-    WaterLeverSensor(MeasurementType measType);
+    WaterLevelSensor() = delete;
+    WaterLevelSensor(MeasurementType measType);
     void measure() override;
 
 private:
@@ -25,4 +25,4 @@ private:
 }//namespace Sensor
 }//namespace IGHouse
 
-#endif //IGHOUSE_WATERLEVERSENSOR_HPP
+#endif //IGHOUSE_WATERLEVELSENSOR_HPP

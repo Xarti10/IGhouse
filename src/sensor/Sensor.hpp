@@ -1,8 +1,9 @@
 #ifndef IGHOUSE_SENSOR_HPP
 #define IGHOUSE_SENSOR_HPP
 
-#include "../Utils/TypeDefinitions.h"
-#include "../Utils/Measurement.h"
+#include "../Utils/TypeDefinitions.hpp"
+#include "../Utils/Measurement.hpp"
+#include "../Utils/PinDefinitions.hpp"
 #include "SensorInterface.hpp"
 #include <memory>
 

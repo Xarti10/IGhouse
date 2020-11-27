@@ -1,6 +1,7 @@
 #include "Sensor.hpp"
-#include "../Utils/TypeDefinitions.h"
-#include "../Utils/Measurement.h"
+#include "../Utils/TypeDefinitions.hpp"
+#include "../Utils/Measurement.hpp"
+#include "../Utils/PinDefinitions.hpp"
 
 #include <memory>
 

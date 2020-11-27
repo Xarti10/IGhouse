@@ -5,7 +5,7 @@
 #include <memory>
 #include "../Sensor.hpp"
 #include "DhtSensorType.hpp"
-#include "../../Utils/TypeDefinitions.h"
+#include "../../Utils/TypeDefinitions.hpp"
 
 namespace IGHouse
 {
