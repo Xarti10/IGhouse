@@ -21,11 +21,12 @@ public:
     virtual void measure() = 0;
 
 private:
-    void initSensor() override;
+    void initSensor();
 
 protected:
+    static std::shared_ptr<DHT> dhtSensor;
     static std::mutex dhtSensorGuard;
-    std::shared_ptr<DHT> dhtSensor{};
+    static bool sensorInited;
 
 };
 

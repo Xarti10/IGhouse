@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "../sensor/SensorRepository.hpp"
+#include "FreeRTOS.h"
 
 namespace IGHouse
 {
@@ -12,11 +13,20 @@ namespace Handlers
 class MeasurementHandler
 {
 public:
-    MeasurementHandler(const std::shared_ptr<SensorRepository> &sensorRepo);
+    MeasurementHandler() = delete;
+    explicit MeasurementHandler(const std::shared_ptr<SensorRepository> &sensorRepo,
+                                std::uint32_t stackDepth = configMINIMAL_STACK_SIZE);
+    ~MeasurementHandler();
 
-    void runMeasurements();
+    void runMeasuremenentTask();
+    void measurements();
 private:
     std::shared_ptr<SensorRepository> sensorRepo;
+    std::uint32_t stackSize;
+    TaskHandle_t taskHandle;
+
+    static void runMeasurements(void *params);
+    void triggerSensorMeasurement(MeasurementType measType);
 };
 
 }//namespace Handlers

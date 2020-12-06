@@ -2,6 +2,7 @@
 #define IGHOUSE_WATERLEVELSENSOR_HPP
 
 #include "../Sensor.hpp"
+#include <cstdint>
 
 namespace IGHouse
 {
@@ -14,11 +15,16 @@ class WaterLevelSensor : public Sensor
 {
 public:
     WaterLevelSensor() = delete;
-    WaterLevelSensor(MeasurementType measType);
+    explicit WaterLevelSensor(MeasurementType measType);
+    virtual ~WaterLevelSensor() = default;
     void measure() override;
 
 private:
-    void initSensor() override;
+
+    static constexpr std::uint16_t sensorMaxRange = 520;
+    static constexpr std::uint16_t adcMaxrange = 4095;
+
+    void initSensor();
 };
 
 }//namespace Drv

@@ -20,9 +20,6 @@ public:
     virtual void measure() = 0;
     virtual std::shared_ptr<Measurement> getMeasurement() = 0;
     virtual MeasurementType getMeasurementType() = 0;
-
-protected:
-    virtual void initSensor() = 0;
 };
 
 }//namespace Sensor

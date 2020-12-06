@@ -11,6 +11,7 @@ constexpr std::uint8_t lightPin = 1;
 constexpr std::uint8_t irrigationPin = 2;
 constexpr std::uint8_t sprinklerPin = 3;
 constexpr std::uint8_t waterLeverIndicatorPin = 4;
+constexpr std::uint8_t waterLeverSensorPin = 4;
 
 }
 

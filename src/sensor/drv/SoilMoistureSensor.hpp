@@ -19,7 +19,7 @@ public:
     void measure() override;
 
 private:
-    void initSensor() override;
+    void initSensor();
 
 };
 

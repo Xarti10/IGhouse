@@ -1,4 +1,5 @@
 #include "WaterLevelSensor.hpp"
+#include "Arduino.h"
 
 namespace IGHouse
 {
@@ -10,17 +11,23 @@ namespace Drv
 WaterLevelSensor::WaterLevelSensor(MeasurementType measType)
         : Sensor(measType)
 {
-
+    initSensor();
 }
 
 void WaterLevelSensor::measure()
 {
-//TODO implementation
+    float raw_Val = analogRead(waterLeverSensorPin);
+    Serial.print("Raw water level: ");
+    Serial.println(raw_Val);
+    float dist_t = raw_Val * sensorMaxRange / adcMaxrange;
+    Serial.print("Water level: ");
+    Serial.println(dist_t);
+    getMeasurement()->setMeasurementValue(dist_t);
 }
 
 void WaterLevelSensor::initSensor()
 {
-//TODO implementation
+//    pinMode(waterLeverSensorPin, OUTPUT);
 }
 
 }//namespace Drv

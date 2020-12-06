@@ -23,8 +23,6 @@ public:
     MeasurementType getMeasurementType() override;
     std::shared_ptr<Measurement> getMeasurement() override;
 
-protected:
-    virtual void initSensor() = 0;
 
 private:
     MeasurementType sensorMeasType;

@@ -23,7 +23,7 @@ void LightSensor::checkId()
     a = id & 0xf0;      //The lower four bits are the silicon version number
     if (!(a == 144))    //ID = 90H = 144D
     {
-        Serial.println("false ");
+        Serial.println("Could not find light sensor");
         correctSensorId = false;
     }
     else

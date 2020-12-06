@@ -25,7 +25,7 @@ private:
 
     std::unique_ptr<WaveShare_TSL2581> tslSensor;
     bool correctSensorId;
-    void initSensor() override;
+    void initSensor() ;
 
 };
 

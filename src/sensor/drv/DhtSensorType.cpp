@@ -2,6 +2,7 @@
 #include <mutex>
 #include <memory>
 #include "DHT.h"
+#define DHTTYPE DHT21
 
 namespace IGHouse
 {
@@ -11,19 +12,24 @@ namespace Drv
 {
 
 std::mutex DhtSensorType::dhtSensorGuard;
+bool DhtSensorType::sensorInited = false;
+std::shared_ptr<DHT> DhtSensorType::dhtSensor = nullptr;
 
 DhtSensorType::DhtSensorType(MeasurementType measType)
 : Sensor(measType)
-, dhtSensor(nullptr)
 {
     initSensor();
 }
 
 void DhtSensorType::initSensor()
 {
-    pinMode(dhtPin, OUTPUT);
-    dhtSensor.reset(new DHT(dhtPin, DHT21));
-    dhtSensor->begin();
+    if(!sensorInited)
+    {
+//        pinMode(dhtPin, OUTPUT);
+        dhtSensor.reset(new DHT(dhtPin, DHTTYPE));
+        dhtSensor->begin();
+        sensorInited = true;
+    }
 }
 
 }//namespace Drv

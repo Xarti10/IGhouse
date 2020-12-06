@@ -2,6 +2,7 @@
 #include "sensor/SensorRepository.hpp"
 #include "mechanism/MechanismRepository.hpp"
 #include <memory>
+#include "Arduino.h"
 
 
 namespace IGHouse
@@ -9,14 +10,15 @@ namespace IGHouse
 
 IGHouse::Greenhouse::Greenhouse()
 : sensorRepo(std::make_shared<SensorRepository>())
-, mechanismRepo(std::make_shared<MechanismRepository>(sensorRepo))
+, mechanismRepo(nullptr/*std::make_shared<MechanismRepository>(sensorRepo)*/)
+, measHandler(std::make_shared<Handlers::MeasurementHandler>(sensorRepo, 5000))
 {
-// TODO implement constructor
+    delay(5000);
 }
 
 void IGHouse::Greenhouse::runMeasurements()
 {
-// TODO implement runnig measurements
+    measHandler->runMeasuremenentTask();
 }
 
 void IGHouse::Greenhouse::publishMeasurements()

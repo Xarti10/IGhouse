@@ -1,6 +1,6 @@
 #include "SensorRepository.hpp"
 #include "SensorFactory.hpp"
-
+#include "Arduino.h"
 #include <memory>
 
 namespace IGHouse
@@ -32,18 +32,23 @@ void SensorRepository::createSensors()
 
     sensorMap.insert(MeasurementPair (MeasurementType::LIGHT,
                                       SensorFactory::createSensorDriver(MeasurementType::LIGHT)));
+    delay(100);
 
     sensorMap.insert(MeasurementPair (MeasurementType::WATER_LEVEL,
                                       SensorFactory::createSensorDriver(MeasurementType::WATER_LEVEL)));
+    delay(100);
 
     sensorMap.insert(MeasurementPair (MeasurementType::HUMIDIDY,
                                       SensorFactory::createSensorDriver(MeasurementType::HUMIDIDY)));
+    delay(100);
 
     sensorMap.insert(MeasurementPair (MeasurementType::TEMPERATURE,
                                       SensorFactory::createSensorDriver(MeasurementType::TEMPERATURE)));
+    delay(100);
 
     sensorMap.insert(MeasurementPair (MeasurementType::SOIL_MOISTURE,
                                       SensorFactory::createSensorDriver(MeasurementType::SOIL_MOISTURE)));
+    delay(100);
 }
 
 }//namespace IGHouse
