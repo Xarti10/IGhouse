@@ -6,11 +6,14 @@
 #include "Greenhouse.hpp"
 #include "Utils/TypeDefinitions.hpp"
 #include "FreeRTOS.h"
+#include "Utils/PinDefinitions.hpp"
 
 std::unique_ptr<IGHouse::Greenhouse> iGHouse;
 
+
 void setup()
 {
+//    analogSetAttenuation(ADC_0db);
     Serial.begin(9600);
     Wire.begin();
     iGHouse.reset(new IGHouse::Greenhouse);
@@ -18,9 +21,7 @@ void setup()
     iGHouse->runMeasurements();
 }
 
-int Liquid_level = 0;
-bool switcher = false;
-
 void loop()
 {
+
 }

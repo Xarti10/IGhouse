@@ -1,6 +1,7 @@
 #include "TemperatureSensor.hpp"
 #include "../../Utils/TypeDefinitions.hpp"
-#include "DHT.h"
+#include "Arduino.h"
+#include "SHTSensor.h"
 
 namespace IGHouse
 {
@@ -10,26 +11,26 @@ namespace Drv
 {
 
 TemperatureSensor::TemperatureSensor(MeasurementType measType)
-: DhtSensorType(measType)
+: ShtSensorType(measType)
 {
 }
 
 void TemperatureSensor::measure()
 {
-    if(dhtSensor == nullptr)
+    if(shtSensor == nullptr)
     {
         Serial.println("DHT sensor failure");
         getMeasurement()->setMeasurementValue(0.0);
         return;
     }
 
-    dhtSensorGuard.lock();
+    shtSensorGuard.lock();
 
-    float temperature = dhtSensor->readTemperature();
+    float temperature = shtSensor->getTemperature();
 
     if (isnan(temperature))
     {
-        Serial.println("Failed to read from DHT");
+        Serial.println("Failed to read from sensor");
         temperature = 0.0;
     }
 
@@ -40,7 +41,7 @@ void TemperatureSensor::measure()
     getMeasurement()->setMeasurementValue(temperature);
     delay(10);
 
-    dhtSensorGuard.unlock();
+    shtSensorGuard.unlock();
 }
 
 }//namespace Drv

@@ -16,18 +16,26 @@ WaterLevelSensor::WaterLevelSensor(MeasurementType measType)
 
 void WaterLevelSensor::measure()
 {
-    float raw_Val = analogRead(waterLeverSensorPin);
+    float raw_Val = 0.0;
+    for (int i = 0; i < 100; ++i)
+    {
+        raw_Val += analogRead(waterLeverSensorPin);
+    }
+
     Serial.print("Raw water level: ");
-    Serial.println(raw_Val);
-    float dist_t = raw_Val * sensorMaxRange / adcMaxrange;
+    Serial.println(18 - ((raw_Val / 100) * ((float)sensorMaxRange / (float)adcMaxrange)) / 3);
+    float dist_t = (18 - ((raw_Val / 100) * ((float)sensorMaxRange / (float)adcMaxrange)) / 3) / 18 * 100;
     Serial.print("Water level: ");
-    Serial.println(dist_t);
+    Serial.print(dist_t);
+    Serial.println("%");
     getMeasurement()->setMeasurementValue(dist_t);
 }
 
 void WaterLevelSensor::initSensor()
 {
 //    pinMode(waterLeverSensorPin, OUTPUT);
+    analogSetPinAttenuation(waterLeverSensorPin, ADC_0db);
+
 }
 
 }//namespace Drv

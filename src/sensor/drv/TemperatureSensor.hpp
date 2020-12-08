@@ -4,7 +4,7 @@
 #include "DHT.h"
 #include <memory>
 #include "../Sensor.hpp"
-#include "DhtSensorType.hpp"
+#include "ShtSensorType.hpp"
 #include "../../Utils/TypeDefinitions.hpp"
 
 namespace IGHouse
@@ -14,7 +14,7 @@ namespace Sensor
 namespace Drv
 {
 
-class TemperatureSensor : public DhtSensorType
+class TemperatureSensor : public ShtSensorType
 {
 public:
     TemperatureSensor() = delete;

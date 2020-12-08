@@ -1,7 +1,7 @@
 #ifndef IGHOUSE_HUMIDITYSENSOR_HPP
 #define IGHOUSE_HUMIDITYSENSOR_HPP
 
-#include "DhtSensorType.hpp"
+#include "ShtSensorType.hpp"
 #include "../../Utils/TypeDefinitions.hpp"
 
 
@@ -12,7 +12,7 @@ namespace Sensor
 namespace Drv
 {
 
-class HumiditySensor : public DhtSensorType
+class HumiditySensor : public ShtSensorType
 {
 public:
     HumiditySensor() = delete;

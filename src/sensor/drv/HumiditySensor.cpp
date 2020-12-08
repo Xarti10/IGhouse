@@ -1,4 +1,7 @@
 #include "HumiditySensor.hpp"
+#include "Arduino.h"
+#include "SHTSensor.h"
+
 
 namespace IGHouse
 {
@@ -8,26 +11,26 @@ namespace Drv
 {
 
 HumiditySensor::HumiditySensor(MeasurementType measType)
-: DhtSensorType(measType)
+: ShtSensorType(measType)
 {
 }
 
 void HumiditySensor::measure()
 {
-    if(dhtSensor == nullptr)
+    if(shtSensor == nullptr)
     {
         Serial.println("DHT sensor failure");
         getMeasurement()->setMeasurementValue(0.0);
         return;
     }
 
-    dhtSensorGuard.lock();
+    shtSensorGuard.lock();
 
-    float humidity = dhtSensor->readHumidity();
+    float humidity = shtSensor->getHumidity();
 
     if (isnan(humidity))
     {
-        Serial.println("Failed to read from DHT");
+        Serial.println("Failed to read from sensor");
         humidity = 0.0;
     }
 
@@ -38,7 +41,7 @@ void HumiditySensor::measure()
     getMeasurement()->setMeasurementValue(humidity);
     delay(10);
 
-    dhtSensorGuard.unlock();
+    shtSensorGuard.unlock();
 }
 
 }//namespace Drv

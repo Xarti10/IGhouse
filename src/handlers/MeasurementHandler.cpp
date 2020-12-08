@@ -23,7 +23,7 @@ MeasurementHandler::~MeasurementHandler()
 void MeasurementHandler::runMeasuremenentTask()
 {
     xTaskCreate(&runMeasurements, "Sensor Measurements", stackSize, this, tskIDLE_PRIORITY, &taskHandle);
-    delay(1000);
+    delay(1500);
 }
 
 void MeasurementHandler::runMeasurements(void *params)

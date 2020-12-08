@@ -2,6 +2,8 @@
 #define IGHOUSE_WATERLEVELINDICATORMECHANISM_HPP
 
 #include "../Mechanism.hpp"
+#include "Adafruit_NeoPixel.h"
+
 
 namespace IGHouse
 {
@@ -23,6 +25,8 @@ public:
     void turnOn() override;
 
 private:
+    std::shared_ptr<Adafruit_NeoPixel> waterLevelIndicator;
+
     void init();
 };
 
