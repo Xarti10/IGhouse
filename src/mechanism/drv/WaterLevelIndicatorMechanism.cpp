@@ -1,4 +1,5 @@
 #include "WaterLevelIndicatorMechanism.hpp"
+#include "Arduino.h"
 
 namespace IGHouse
 {
@@ -15,7 +16,7 @@ WaterLevelIndicatorMechanism::WaterLevelIndicatorMechanism(MechanismType mechTyp
     init();
 }
 
-void WaterLevelIndicatorMechanism::runObservation()
+void WaterLevelIndicatorMechanism::monitorFunction()
 {
 //todo implement
 }
@@ -32,7 +33,8 @@ void WaterLevelIndicatorMechanism::turnOn()
 
 void WaterLevelIndicatorMechanism::init()
 {
-//todo implement
+    pinMode(mechanismPin, OUTPUT);
+    digitalWrite(mechanismPin, LOW);
 }
 
 }//namespace Drv

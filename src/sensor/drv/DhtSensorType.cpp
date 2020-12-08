@@ -25,7 +25,7 @@ void DhtSensorType::initSensor()
 {
     if(!sensorInited)
     {
-//        pinMode(dhtPin, OUTPUT);
+        Serial.println(__FUNCTION__);
         dhtSensor.reset(new DHT(dhtPin, DHTTYPE));
         dhtSensor->begin();
         sensorInited = true;

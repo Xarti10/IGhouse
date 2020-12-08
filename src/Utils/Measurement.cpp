@@ -19,4 +19,9 @@ void Measurement::setMeasurementValue(float val)
     value = val;
 }
 
+float Measurement::getMeasurementValue() const
+{
+    return value;
+}
+
 }//namespace IGHouse

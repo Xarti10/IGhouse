@@ -3,3 +3,4 @@
 .idea
 cmake-*
 IGHouse.*
+/UserUseCase.puml

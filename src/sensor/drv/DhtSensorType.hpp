@@ -22,11 +22,11 @@ public:
 
 private:
     void initSensor();
+    static bool sensorInited;
 
 protected:
     static std::shared_ptr<DHT> dhtSensor;
     static std::mutex dhtSensorGuard;
-    static bool sensorInited;
 
 };
 

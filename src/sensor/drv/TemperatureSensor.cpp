@@ -16,20 +16,30 @@ TemperatureSensor::TemperatureSensor(MeasurementType measType)
 
 void TemperatureSensor::measure()
 {
+    if(dhtSensor == nullptr)
+    {
+        Serial.println("DHT sensor failure");
+        getMeasurement()->setMeasurementValue(0.0);
+        return;
+    }
+
     dhtSensorGuard.lock();
+
     float temperature = dhtSensor->readTemperature();
+
     if (isnan(temperature))
     {
         Serial.println("Failed to read from DHT");
         temperature = 0.0;
-    } else
-    {
-        Serial.print("Temperature: ");
-        Serial.print(temperature);
-        Serial.println(" *C\n");
     }
+
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.println(" *C");
+
     getMeasurement()->setMeasurementValue(temperature);
     delay(10);
+
     dhtSensorGuard.unlock();
 }
 

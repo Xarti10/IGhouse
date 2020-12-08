@@ -12,12 +12,11 @@ public:
     MechanismInterface() = default;
     virtual ~MechanismInterface() = default;
 
-    virtual void runObservation() = 0;
+    virtual void monitorFunction() = 0;
     virtual void turnOff() = 0;
     virtual void turnOn() = 0;
 
 private:
-    virtual void init() = 0;
 };
 
 }//namespace Mechanism

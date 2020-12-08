@@ -17,12 +17,12 @@ public:
     LightMechanism(MechanismType mechType, const std::shared_ptr<Sensor::SensorInterface> &sensorDrv, uint8_t mechPin);
     virtual ~LightMechanism() = default;
 
-    void runObservation() override;
+    void monitorFunction() override;
     void turnOff() override;
     void turnOn() override;
 
 private:
-    void init() override;
+    void init();
 };
 
 }//namespace Drv

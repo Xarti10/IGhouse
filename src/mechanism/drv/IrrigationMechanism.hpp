@@ -18,12 +18,12 @@ public:
                         uint8_t mechPin);
     virtual ~IrrigationMechanism() = default;
 
-    void runObservation() override;
+    void monitorFunction() override;
     void turnOff() override;
     void turnOn() override;
 
 private:
-    void init() override;
+    void init();
 };
 
 }//namespace Drv

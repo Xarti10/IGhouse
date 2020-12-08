@@ -2,6 +2,7 @@
 #define IGHOUSE_SOILMOISTURESENSOR_HPP
 
 #include "../Sensor.hpp"
+#include <cstdint>
 
 namespace IGHouse
 {
@@ -19,6 +20,8 @@ public:
     void measure() override;
 
 private:
+    static constexpr std::uint16_t drySensorInAir = 3000;
+    static constexpr std::uint16_t wetSensorInWater = 1320;
     void initSensor();
 
 };

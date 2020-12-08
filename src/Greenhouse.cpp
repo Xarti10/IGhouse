@@ -10,15 +10,17 @@ namespace IGHouse
 
 IGHouse::Greenhouse::Greenhouse()
 : sensorRepo(std::make_shared<SensorRepository>())
-, mechanismRepo(nullptr/*std::make_shared<MechanismRepository>(sensorRepo)*/)
+, mechanismRepo(std::make_shared<MechanismRepository>(sensorRepo))
 , measHandler(std::make_shared<Handlers::MeasurementHandler>(sensorRepo, 5000))
+, mechHandler(std::make_shared<Handlers::MechanismHandler>(mechanismRepo, 5000))
 {
-    delay(5000);
+    delay(500);
 }
 
 void IGHouse::Greenhouse::runMeasurements()
 {
     measHandler->runMeasuremenentTask();
+    mechHandler->runMechanismMonitorTask();
 }
 
 void IGHouse::Greenhouse::publishMeasurements()

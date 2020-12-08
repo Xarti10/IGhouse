@@ -8,10 +8,10 @@ namespace IGHouse
 namespace Handlers
 {
 
-MeasurementHandler::MeasurementHandler(const std::shared_ptr<SensorRepository> &sensorRepo, std::uint32_t stackDepth)
+MeasurementHandler::MeasurementHandler(std::shared_ptr<SensorRepository> sensorRepo, std::uint32_t stackDepth)
 : sensorRepo(sensorRepo)
 , stackSize(stackDepth)
-, taskHandle(NULL)
+, taskHandle(nullptr)
 {
 }
 
@@ -23,7 +23,7 @@ MeasurementHandler::~MeasurementHandler()
 void MeasurementHandler::runMeasuremenentTask()
 {
     xTaskCreate(&runMeasurements, "Sensor Measurements", stackSize, this, tskIDLE_PRIORITY, &taskHandle);
-    delay(5000);
+    delay(1000);
 }
 
 void MeasurementHandler::runMeasurements(void *params)
@@ -33,11 +33,11 @@ void MeasurementHandler::runMeasurements(void *params)
 //    measurementHandlerClassPointer->measurements();
 }
 
-void MeasurementHandler::measurements()
+[[noreturn]] void MeasurementHandler::measurements()
 {
     Serial.println("MeasurementHandler task created");
-    constexpr TickType_t taskDelay = 2000 / portTICK_PERIOD_MS;
-    int tick = 0;
+    constexpr TickType_t taskDelay = 1000 / portTICK_PERIOD_MS;
+
     while(true)
     {
         triggerSensorMeasurement(MeasurementType::LIGHT);
@@ -46,9 +46,6 @@ void MeasurementHandler::measurements()
         triggerSensorMeasurement(MeasurementType::TEMPERATURE);
         triggerSensorMeasurement(MeasurementType::SOIL_MOISTURE);
 
-        tick++;
-        Serial.print("Tick: ");
-        Serial.println(tick);
         vTaskDelay(taskDelay);
     }
 }

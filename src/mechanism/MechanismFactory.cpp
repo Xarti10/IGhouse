@@ -19,11 +19,11 @@ std::shared_ptr<MechanismInterface> MechanismFactory::createMechanismDriver(Mech
     switch(mechanismType)
     {
         case MechanismType::LIGHT:
-            return std::make_shared<Drv::LightMechanism>(mechanismType, sensorDrv, lightPin);
+            return std::make_shared<Drv::LightMechanism>(mechanismType, sensorDrv, lightMechanismPin);
         case MechanismType::IRRIGATION:
-            return std::make_shared<Drv::IrrigationMechanism>(mechanismType, sensorDrv, irrigationPin);
-        case MechanismType::SPRINKLER:
-            return std::make_shared<Drv::SprinklerMechanism>(mechanismType, sensorDrv, sprinklerPin);
+            return std::make_shared<Drv::IrrigationMechanism>(mechanismType, sensorDrv, irrigationMechanismPin);
+//        case MechanismType::SPRINKLER:
+//            return std::make_shared<Drv::SprinklerMechanism>(mechanismType, sensorDrv, sprinklerMechanismPin);
         case MechanismType::WATTER_LEVEL:
             return std::make_shared<Drv::WaterLevelIndicatorMechanism>(mechanismType, sensorDrv, waterLeverIndicatorPin);
         case MechanismType::UNKNOWN:

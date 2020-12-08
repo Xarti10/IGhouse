@@ -13,10 +13,12 @@ public:
     explicit Measurement(MeasurementType measType);
     MeasurementType getMeasurementType();
     void setMeasurementValue(float val);
+    float getMeasurementValue() const;
 
 private:
     MeasurementType measurementType;
     float value;
+
 //TODO add field that will store data format, also add getter/setter to it
 };
 
