@@ -6,7 +6,6 @@ namespace IGHouse
 Measurement::Measurement(MeasurementType measType)
         : measurementType(measType), value(0.0)
 {
-//TODO make implementation in needed
 }
 
 MeasurementType Measurement::getMeasurementType()

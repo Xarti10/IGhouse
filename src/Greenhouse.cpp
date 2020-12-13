@@ -13,6 +13,7 @@ IGHouse::Greenhouse::Greenhouse()
 , mechanismRepo(std::make_shared<MechanismRepository>(sensorRepo))
 , measHandler(std::make_shared<Handlers::MeasurementHandler>(sensorRepo, 5000))
 , mechHandler(std::make_shared<Handlers::MechanismHandler>(mechanismRepo, 5000))
+, connectionHandler(std::make_shared<Handlers::ConnectionHandler>())
 {
     delay(500);
 }

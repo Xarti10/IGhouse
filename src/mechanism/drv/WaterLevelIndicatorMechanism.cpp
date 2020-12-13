@@ -125,12 +125,10 @@ void WaterLevelIndicatorMechanism::monitorFunction()
 
 void WaterLevelIndicatorMechanism::turnOff()
 {
-//todo implement
 }
 
 void WaterLevelIndicatorMechanism::turnOn()
 {
-//todo implement
 }
 
 void WaterLevelIndicatorMechanism::init()

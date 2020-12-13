@@ -1,7 +1,6 @@
 #ifndef IGHOUSE_TEMPERATURESENSOR_HPP
 #define IGHOUSE_TEMPERATURESENSOR_HPP
 
-#include "DHT.h"
 #include <memory>
 #include "../Sensor.hpp"
 #include "ShtSensorType.hpp"

@@ -28,7 +28,6 @@ void SoilMoistureSensor::measure()
 
 void SoilMoistureSensor::initSensor()
 {
-//    TODO implement
 }
 
 }//namespace Drv

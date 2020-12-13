@@ -1,0 +1,11 @@
+#ifndef SZKLARNIA_WIFISERVICE_HPP
+#define SZKLARNIA_WIFISERVICE_HPP
+
+
+class WiFiService
+{
+
+};
+
+
+#endif //SZKLARNIA_WIFISERVICE_HPP

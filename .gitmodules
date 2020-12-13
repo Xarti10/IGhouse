@@ -1,3 +1,12 @@
 [submodule "test/googletest"]
 	path = test/googletest
 	url = https://github.com/google/googletest
+[submodule "lib/socketio"]
+	path = lib/socketio
+	url = https://github.com/washo4evr/Socket.io-v1.x-Library.git
+[submodule "lib/SocketIoServer"]
+	path = lib/SocketIoServer
+	url = https://github.com/etidbury/socket.io-client-esp32.git
+[submodule "lib/WebSockets"]
+	path = lib/WebSockets
+	url = https://github.com/Links2004/arduinoWebSockets.git
