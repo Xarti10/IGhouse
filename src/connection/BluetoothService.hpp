@@ -24,6 +24,8 @@ public:
 private:
     std::shared_ptr<BLEAdvertising> advertising;
     std::shared_ptr<BLECharacteristic> characteristic;
+    std::shared_ptr<BLEService> service;
+    std::shared_ptr<BLEServer> server;
     char *accessPointName;
     static constexpr char *SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
     static constexpr char *CHARACTERISTIC_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
@@ -31,6 +33,7 @@ private:
     std::shared_ptr<Drv::Bluetooth::ServerCallbackHandler> serverCallbackHandler;
 
     void createUniqueName();
+    void init();
 };
 
 }//namespace Connection
