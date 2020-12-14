@@ -30,7 +30,7 @@ public:
     DeviceCallbackHandler() = delete;
     DeviceCallbackHandler(char *accessPointName,
                           std::shared_ptr<BLECharacteristic> &characteristic,
-                          std::uint32_t jsonBufferSize = 1024);
+                          std::uint16_t jsonBufferSize = 256);
     virtual ~DeviceCallbackHandler() = default;
 
     void onWrite(BLECharacteristic *pCharacteristic) override;

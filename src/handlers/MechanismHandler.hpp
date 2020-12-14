@@ -15,7 +15,7 @@ class MechanismHandler
 {
 public:
     MechanismHandler() = delete;
-    explicit MechanismHandler(std::shared_ptr<MechanismRepository> mechanismRepository,
+    explicit MechanismHandler(std::shared_ptr<MechanismRepository> &mechanismRepository,
                               std::uint32_t stackDepth = configMINIMAL_STACK_SIZE);
     ~MechanismHandler();
 

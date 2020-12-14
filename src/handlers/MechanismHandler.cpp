@@ -8,7 +8,7 @@ namespace Handlers
 {
 
 
-MechanismHandler::MechanismHandler(std::shared_ptr<MechanismRepository> mechanismRepository,
+MechanismHandler::MechanismHandler(std::shared_ptr<MechanismRepository> &mechanismRepository,
                                    std::uint32_t stackDepth)
 : mechanismRepo(mechanismRepository)
 , stackSize(stackDepth)
@@ -40,10 +40,10 @@ void MechanismHandler::runMechanismMonitor(void *params)
 
     while(true)
     {
-        triggerMechanismMonitor(MechanismType::LIGHT);
-        triggerMechanismMonitor(MechanismType::IRRIGATION);
-//        triggerMechanismMonitor(MechanismType::SPRINKLER);
-        triggerMechanismMonitor(MechanismType::WATTER_LEVEL);
+        for (const auto &mechanism : mechanismList)
+        {
+            triggerMechanismMonitor(mechanism);
+        }
 
         vTaskDelay(taskDelay);
     }

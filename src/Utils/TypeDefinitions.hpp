@@ -2,6 +2,7 @@
 #define IGHOUSE_TYPEDEFINITIONS_HPP
 
 #include <cstdint>
+#include <vector>
 
 namespace IGHouse
 {
@@ -16,6 +17,11 @@ enum class MechanismType : std::uint8_t
     SPRINKLER = 4,
 };
 
+static const std::vector<MechanismType> mechanismList = {MechanismType::IRRIGATION,
+                                                         MechanismType::LIGHT,
+                                                         MechanismType::WATTER_LEVEL,
+                                                         MechanismType::SPRINKLER};
+
 enum class MeasurementType : std::uint8_t
 {
     UNKNOWN = 255,
@@ -26,6 +32,12 @@ enum class MeasurementType : std::uint8_t
     SOIL_MOISTURE = 4,
     CRITICAL_WATTER_LEVEL = 5,
 };
+
+static const std::vector<MeasurementType> measurementList = {MeasurementType::HUMIDIDY,
+                                                             MeasurementType::TEMPERATURE,
+                                                             MeasurementType::LIGHT,
+                                                             MeasurementType::WATER_LEVEL,
+                                                             MeasurementType::SOIL_MOISTURE};
 
 }//namespace IGHouse
 

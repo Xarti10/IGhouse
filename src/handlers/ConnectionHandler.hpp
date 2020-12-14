@@ -5,6 +5,7 @@
 #include "Arduino.h"
 
 #include <connection/BluetoothService.hpp>
+#include <connection/WiFiService.hpp>
 
 namespace IGHouse
 {
@@ -18,6 +19,7 @@ public:
 
 private:
     std::shared_ptr<Connection::BluetoothService> bluetoothService;
+    std::shared_ptr<Connection::WiFiService> wifiService;
 };
 
 }//namespace Handlers

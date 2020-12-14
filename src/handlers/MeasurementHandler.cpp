@@ -8,7 +8,7 @@ namespace IGHouse
 namespace Handlers
 {
 
-MeasurementHandler::MeasurementHandler(std::shared_ptr<SensorRepository> sensorRepo, std::uint32_t stackDepth)
+MeasurementHandler::MeasurementHandler(std::shared_ptr<SensorRepository> &sensorRepo, std::uint32_t stackDepth)
 : sensorRepo(sensorRepo)
 , stackSize(stackDepth)
 , taskHandle(nullptr)
@@ -40,11 +40,10 @@ void MeasurementHandler::runMeasurements(void *params)
 
     while(true)
     {
-        triggerSensorMeasurement(MeasurementType::LIGHT);
-        triggerSensorMeasurement(MeasurementType::WATER_LEVEL);
-        triggerSensorMeasurement(MeasurementType::HUMIDIDY);
-        triggerSensorMeasurement(MeasurementType::TEMPERATURE);
-        triggerSensorMeasurement(MeasurementType::SOIL_MOISTURE);
+        for (const auto &measurement : measurementList)
+        {
+            triggerSensorMeasurement(measurement);
+        }
 
         vTaskDelay(taskDelay);
     }

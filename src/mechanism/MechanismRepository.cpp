@@ -51,17 +51,11 @@ void MechanismRepository::createMechanisms()
     using namespace Mechanism;
     typedef std::pair<MechanismType, std::shared_ptr<MechanismInterface>> MechanismPair;
 
-    mechanismMap.insert(MechanismPair (MechanismType::LIGHT, MechanismFactory::createMechanismDriver(MechanismType::LIGHT,
-                                                                                          mapSensorToMechanism(MechanismType::LIGHT))));
-
-    mechanismMap.insert(MechanismPair (MechanismType::IRRIGATION, MechanismFactory::createMechanismDriver(MechanismType::IRRIGATION,
-                                                                                                     mapSensorToMechanism(MechanismType::IRRIGATION))));
-
-    mechanismMap.insert(MechanismPair (MechanismType::SPRINKLER, MechanismFactory::createMechanismDriver(MechanismType::SPRINKLER,
-                                                                                                     mapSensorToMechanism(MechanismType::SPRINKLER))));
-
-    mechanismMap.insert(MechanismPair (MechanismType::WATTER_LEVEL, MechanismFactory::createMechanismDriver(MechanismType::WATTER_LEVEL,
-                                                                                                     mapSensorToMechanism(MechanismType::WATTER_LEVEL))));
+    for (const auto &mechanismTypeIt : mechanismList)
+    {
+        mechanismMap.insert(MechanismPair (mechanismTypeIt, MechanismFactory::createMechanismDriver(mechanismTypeIt,
+                                                                                                    mapSensorToMechanism(mechanismTypeIt))));
+    }
 }
 
 

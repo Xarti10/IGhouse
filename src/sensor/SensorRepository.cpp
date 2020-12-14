@@ -30,25 +30,11 @@ void SensorRepository::createSensors()
     using namespace Sensor;
     typedef std::pair<MeasurementType, std::shared_ptr<SensorInterface>> MeasurementPair;
 
-    sensorMap.insert(MeasurementPair (MeasurementType::LIGHT,
-                                      SensorFactory::createSensorDriver(MeasurementType::LIGHT)));
-    delay(100);
-
-    sensorMap.insert(MeasurementPair (MeasurementType::WATER_LEVEL,
-                                      SensorFactory::createSensorDriver(MeasurementType::WATER_LEVEL)));
-    delay(100);
-
-    sensorMap.insert(MeasurementPair (MeasurementType::HUMIDIDY,
-                                      SensorFactory::createSensorDriver(MeasurementType::HUMIDIDY)));
-    delay(100);
-
-    sensorMap.insert(MeasurementPair (MeasurementType::TEMPERATURE,
-                                      SensorFactory::createSensorDriver(MeasurementType::TEMPERATURE)));
-    delay(100);
-
-    sensorMap.insert(MeasurementPair (MeasurementType::SOIL_MOISTURE,
-                                      SensorFactory::createSensorDriver(MeasurementType::SOIL_MOISTURE)));
-    delay(100);
+    for (const auto &measurementTypeIt : measurementList)
+    {
+        sensorMap.insert(MeasurementPair(measurementTypeIt,
+                                         SensorFactory::createSensorDriver(measurementTypeIt)));
+    }
 }
 
 }//namespace IGHouse

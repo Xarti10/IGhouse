@@ -45,7 +45,7 @@ Command translateStringToCommand(String commandString)
 
 DeviceCallbackHandler::DeviceCallbackHandler(char *accessPointName,
                                              std::shared_ptr<BLECharacteristic> &characteristic,
-                                             std::uint32_t jsonBufferSize)
+                                             std::uint16_t jsonBufferSize)
         : accessPointName(accessPointName)
         , jsonBuffer(jsonBufferSize)
         , characteristics(characteristic)

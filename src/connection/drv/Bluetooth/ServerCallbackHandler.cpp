@@ -2,16 +2,9 @@
 
 #include "Arduino.h"
 
-#include "BLEUtils.h"
 #include "BLEServer.h"
-#include "BLEDevice.h"
 #include "BLEAdvertising.h"
-#include <ArduinoJson.h>
-#include <Preferences.h>
-#include <nvs.h>
-#include <nvs_flash.h>
 
-#include <cstdint>
 #include <memory>
 
 namespace IGHouse

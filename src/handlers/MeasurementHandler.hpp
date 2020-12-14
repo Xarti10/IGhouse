@@ -14,7 +14,7 @@ class MeasurementHandler
 {
 public:
     MeasurementHandler() = delete;
-    explicit MeasurementHandler(std::shared_ptr<SensorRepository> sensorRepo,
+    explicit MeasurementHandler(std::shared_ptr<SensorRepository> &sensorRepo,
                                 std::uint32_t stackDepth = configMINIMAL_STACK_SIZE);
     ~MeasurementHandler();
 

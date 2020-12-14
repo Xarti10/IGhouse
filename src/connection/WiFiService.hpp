@@ -14,13 +14,12 @@ class WiFiService
 {
 public:
     void connectWiFi();
+    void getNewPreferences();
+    bool scanWiFi();
 
 private:
     String ssid;
     String password;
-
-    void getPreferences();
-    bool scanWiFi();
 };
 
 }//namespace Connection

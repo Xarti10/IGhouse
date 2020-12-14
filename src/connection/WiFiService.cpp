@@ -42,7 +42,7 @@ void WiFiService::connectWiFi()
     WiFi.begin(ssid.c_str(), password.c_str());
 }
 
-void WiFiService::getPreferences()
+void WiFiService::getNewPreferences()
 {
     Preferences preferences;
     preferences.begin("WiFiCred", false);

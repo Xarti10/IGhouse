@@ -1,11 +1,7 @@
 #include "BluetoothService.hpp"
 
-#include <ArduinoJson.h>
 #include <Preferences.h>
 #include <nvs.h>
-#include <nvs_flash.h>
-#include <memory>
-#include <string>
 
 
 namespace IGHouse
