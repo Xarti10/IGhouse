@@ -10,3 +10,6 @@
 [submodule "lib/WebSockets"]
 	path = lib/WebSockets
 	url = https://github.com/Links2004/arduinoWebSockets.git
+[submodule "lib/encrypt"]
+	path = lib/encrypt
+	url = https://github.com/josephpal/esp32-Encrypt.git

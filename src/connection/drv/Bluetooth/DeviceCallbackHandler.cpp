@@ -10,7 +10,7 @@
 #include <map>
 #include "Arduino.h"
 #include "Utils/CommandDefinitions.hpp"
-
+#include "Cipher.h"
 
 namespace IGHouse
 {
@@ -43,36 +43,47 @@ Command translateStringToCommand(String commandString)
 
 }//namespace
 
-DeviceCallbackHandler::DeviceCallbackHandler(char *accessPointName,
+DeviceCallbackHandler::DeviceCallbackHandler(String &accessPointName,
                                              std::shared_ptr<BLECharacteristic> &characteristic,
                                              std::uint16_t jsonBufferSize)
-        : accessPointName(accessPointName)
-        , jsonBuffer(jsonBufferSize)
-        , characteristics(characteristic)
+: accessPointName(accessPointName)
+, ssid("xxx")
+, password("xxxxxx")
+, jsonBuffer(jsonBufferSize)
+, characteristics(characteristic)
+, cipher(std::make_shared<Cipher>())
 {
+    Serial.println(__FUNCTION__);
+//    auto keyFromAccessPointName = new std::uint8_t [accessPointName.length()];
+//    accessPointName.getBytes(keyFromAccessPointName, accessPointName.length());
 
+//    aes->setKey(keyFromAccessPointName, aes->keySize());
+//    delete keyFromAccessPointName;
+    char *keyFromAccessPointName = new char[accessPointName.length()+1];
+    strcpy(keyFromAccessPointName, accessPointName.c_str());
+    cipher->setKey(keyFromAccessPointName);
 }
 
 String DeviceCallbackHandler::decodeData(BLECharacteristic *pCharacteristic)
 {
+    Serial.println(__FUNCTION__);
     std::string value = pCharacteristic->getValue();
     if (value.length() == 0) {
         return "";
     }
-    Serial.println("Received over BLE: " + String((char *)&value[0]));
+    delay(50);
+    Serial.print("Received over BLE: ");
+    Serial.println( String((char *)&value[0]));
 
-    // Decode data
-    int keyIndex = 0;
-    for (char & index : value) {
-        index = (char) index ^ (char) accessPointName[keyIndex];
-        keyIndex++;
-        if (keyIndex >= strlen(accessPointName)) keyIndex = 0;
-    }
-    return (char *)&value[0];
+    String decodedValue = cipher->decryptString(String(value.c_str()));
+    Serial.println(decodedValue);
+
+    return decodedValue;
 }
 
 void DeviceCallbackHandler::fillWiFiCredentials(JsonVariant arguments)
 {
+    Serial.println(__FUNCTION__);
     JsonVariant ssidFromJson = arguments["ssid"];
     JsonVariant passwordFromJson = arguments["password"];
 
@@ -99,6 +110,7 @@ void DeviceCallbackHandler::fillWiFiCredentials(JsonVariant arguments)
 
 void DeviceCallbackHandler::eraseWiFiCredentials()
 {
+    Serial.println(__FUNCTION__);
     Serial.println("Received erase command");
     Preferences preferences;
     preferences.begin("WiFiCred", false);
@@ -118,7 +130,9 @@ void DeviceCallbackHandler::eraseWiFiCredentials()
 
 void DeviceCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
 {
+    Serial.println(__FUNCTION__);
     /** Json object for incoming data */
+    Serial.println("On write request");
     deserializeJson(jsonBuffer, decodeData(pCharacteristic));
     jsonBuffer.shrinkToFit();
 
@@ -132,6 +146,7 @@ void DeviceCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
             {
                 case Command::CONNECT_TO_WIFI:
                 {
+                    Serial.println("Command CONNECT_TO_WIFI was called");
                     JsonVariant arguments = jsonIn["arguments"];
                     if(arguments.isNull())
                     {
@@ -143,17 +158,20 @@ void DeviceCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
                 }
                 case Command::ERASE:
                 {
+                    Serial.println("Command ERASE was called");
                     eraseWiFiCredentials();
                     break;
                 }
                 case Command::RESET:
                 {
+                    Serial.println("Command RESET was called");
 //                    WiFi.disconnect();
                     esp_restart();
                     break;
                 }
                 case Command::GET_SENSOR_DATA:
                 {
+                    Serial.println("Command GET_SENSOR_DATA was called");
                     Serial.println("");
                     break;
                 }
@@ -174,23 +192,20 @@ void DeviceCallbackHandler::onRead(BLECharacteristic *pCharacteristic)
     Serial.println("BLE onRead request");
     String wifiCredentials;
 
-    /** Json object for outgoing data */
-    JsonObject jsonOut = jsonBuffer.as<JsonObject>();
-    jsonOut["ssid"] = ssid;
-    jsonOut["password"] = password;
+    jsonBuffer["ssid"] = ssid;
+    jsonBuffer["password"] = password;
 
-    // Convert JSON object into a string
-    serializeJson(jsonOut, wifiCredentials);
+    Serial.print("Stored settings: ");
+    Serial.print(jsonBuffer["ssid"].as<String>());
+    Serial.println(jsonBuffer["password"].as<String>());
 
-    // encode the data
-    int keyIndex = 0;
-    Serial.println("Stored settings: " + wifiCredentials);
-    for (char & wifiCredential : wifiCredentials) {
-        wifiCredential = (char) wifiCredential ^ (char) accessPointName[keyIndex];
-        keyIndex++;
-        if (keyIndex >= strlen(accessPointName)) keyIndex = 0;
-    }
-    characteristics->setValue((uint8_t*)&wifiCredentials[0],wifiCredentials.length());
+    // Convert JSON into a string
+    serializeJson(jsonBuffer, wifiCredentials);
+
+    String encodedString = cipher->encryptString(wifiCredentials);
+
+    pCharacteristic->setValue(std::string(encodedString.c_str()));
+
     jsonBuffer.clear();
 }
 

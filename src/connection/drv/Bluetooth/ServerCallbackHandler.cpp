@@ -30,7 +30,7 @@ void ServerCallbackHandler::onConnect(BLEServer *pServer)
 void ServerCallbackHandler::onDisconnect(BLEServer *pServer)
 {
     Serial.println("BLE client disconnected");
-    pAdvertising->start();
+    pServer->getAdvertising()->start();
 }
 
 }//namesapce Bluetooth

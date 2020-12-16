@@ -18,9 +18,9 @@ public:
     explicit Mechanism(MechanismType mechType,std::shared_ptr<Sensor::SensorInterface> sensorDrv, std::uint8_t mechPin);
     virtual ~Mechanism() = default;
 
-    virtual void monitorFunction() = 0;
-    virtual void turnOff() = 0;
-    virtual void turnOn() = 0;
+//    virtual void monitorFunction() = 0;
+//    virtual void turnOff() = 0;
+//    virtual void turnOn() = 0;
 
 protected:
     MechanismType mechanismType;

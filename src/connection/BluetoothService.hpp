@@ -23,13 +23,14 @@ class BluetoothService
 {
 public:
     BluetoothService();
+    ~BluetoothService();
 
 private:
     std::shared_ptr<BLEAdvertising> advertising;
     std::shared_ptr<BLECharacteristic> characteristic;
     std::shared_ptr<BLEService> service;
     std::shared_ptr<BLEServer> server;
-    char *accessPointName;
+    String accessPointName;
 
     std::shared_ptr<Drv::Bluetooth::DeviceCallbackHandler> deviceCallbackHandler;
     std::shared_ptr<Drv::Bluetooth::ServerCallbackHandler> serverCallbackHandler;

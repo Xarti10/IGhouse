@@ -19,7 +19,7 @@ public:
     explicit Sensor(MeasurementType measType);
     virtual ~Sensor() = default;
 
-    virtual void measure() = 0;
+//    virtual void measure() = 0;
     MeasurementType getMeasurementType() override;
     std::shared_ptr<Measurement> getMeasurement() override;
 

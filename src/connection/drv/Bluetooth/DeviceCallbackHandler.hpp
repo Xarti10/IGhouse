@@ -14,6 +14,7 @@
 
 #include <cstdint>
 #include <memory>
+#include "Cipher.h"
 
 namespace IGHouse
 {
@@ -28,7 +29,7 @@ class DeviceCallbackHandler : public BLECharacteristicCallbacks
 {
 public:
     DeviceCallbackHandler() = delete;
-    DeviceCallbackHandler(char *accessPointName,
+    DeviceCallbackHandler(String &accessPointName,
                           std::shared_ptr<BLECharacteristic> &characteristic,
                           std::uint16_t jsonBufferSize = 256);
     virtual ~DeviceCallbackHandler() = default;
@@ -37,11 +38,12 @@ public:
     void onRead(BLECharacteristic *pCharacteristic) override;
 
 private:
-    char *accessPointName;
+    String accessPointName;
     String ssid;
     String password;
     DynamicJsonDocument jsonBuffer;
     std::shared_ptr<BLECharacteristic> characteristics;
+    std::shared_ptr<Cipher> cipher ;
 
     String decodeData(BLECharacteristic *pCharacteristic);
     void fillWiFiCredentials(JsonVariant arguments);

@@ -2,6 +2,8 @@
 
 #include <Preferences.h>
 #include <nvs.h>
+#include <sstream>
+#include <iomanip>
 
 
 namespace IGHouse
@@ -10,7 +12,11 @@ namespace Connection
 {
 
 BluetoothService::BluetoothService()
-: accessPointName()
+: advertising(nullptr)
+, characteristic(nullptr)
+, service(nullptr)
+, server(nullptr)
+, accessPointName("")
 , deviceCallbackHandler(nullptr)
 , serverCallbackHandler(nullptr)
 {
@@ -20,40 +26,61 @@ BluetoothService::BluetoothService()
     init();
 }
 
+BluetoothService::~BluetoothService()
+{
+}
+
 void BluetoothService::createUniqueName()
 {
     std::uint8_t baseMac[6];
     esp_read_mac(baseMac, ESP_MAC_WIFI_STA);
 
-    sprintf(accessPointName, "ESP32-%02X%02X%02X%02X%02X%02X", baseMac[0], baseMac[1], baseMac[2], baseMac[3],
-            baseMac[4], baseMac[5]);
+    std::ostringstream stringBuffer;
+    stringBuffer << "ESP32-" << std::hex << std::setw(2) << (unsigned int) baseMac[0] << "-"
+                             << std::hex << std::setw(2) << (unsigned int) baseMac[1] << "-"
+                             << std::hex << std::setw(2) << (unsigned int) baseMac[2] << "-"
+                             << std::hex << std::setw(2) << (unsigned int) baseMac[3] << "-"
+                             << std::hex << std::setw(2) << (unsigned int) baseMac[4] << "-"
+                             << std::hex << std::setw(2) << (unsigned int) baseMac[5];
+
+    accessPointName = stringBuffer.str().c_str();
+    Serial.println(accessPointName);
 }
 
 void BluetoothService::init()
 {
-    BLEDevice::init(accessPointName);
-    BLEDevice::setPower(ESP_PWR_LVL_P7);
+    BLEDevice::init(accessPointName.c_str());
+//    BLEDevice::setPower(ESP_PWR_LVL_P7);
 
     // Create BLE Server
     server.reset(BLEDevice::createServer());
-
-    // Set server callbacks
-    server->setCallbacks(serverCallbackHandler.get());
+    delay(50);
 
     // Create BLE Service
     service.reset(server->createService(BLEUUID(SERVICE_UUID),20));
+    delay(50);
+
+    // Set server callbacks
+    server->setCallbacks(serverCallbackHandler.get());
+    delay(50);
 
     // Create BLE Characteristic for WiFi settings
     characteristic.reset(service->createCharacteristic(BLEUUID(CHARACTERISTIC_UUID),
                                                        BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
     ));
+    delay(50);
+
     characteristic->setCallbacks(deviceCallbackHandler.get());
+    delay(50);
 
     // Start the service
     service->start();
+    delay(50);
 
     // Start advertising
     advertising.reset(server->getAdvertising());
+    delay(50);
+
     advertising->start();
 }
 

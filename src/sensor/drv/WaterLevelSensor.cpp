@@ -22,8 +22,6 @@ void WaterLevelSensor::measure()
         raw_Val += analogRead(waterLeverSensorPin);
     }
 
-    Serial.print("Raw water level: ");
-    Serial.println(18 - ((raw_Val / 100) * ((float)sensorMaxRange / (float)adcMaxrange)) / 3);
     float dist_t = (18 - ((raw_Val / 100) * ((float)sensorMaxRange / (float)adcMaxrange)) / 3) / 18 * 100;
     Serial.print("Water level: ");
     Serial.print(dist_t);

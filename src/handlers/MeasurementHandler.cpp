@@ -36,7 +36,7 @@ void MeasurementHandler::runMeasurements(void *params)
 [[noreturn]] void MeasurementHandler::measurements()
 {
     Serial.println("MeasurementHandler task created");
-    constexpr TickType_t taskDelay = 1000 / portTICK_PERIOD_MS;
+    constexpr TickType_t taskDelay = 5000 / portTICK_PERIOD_MS;
 
     while(true)
     {
