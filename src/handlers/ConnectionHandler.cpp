@@ -9,9 +9,10 @@ namespace IGHouse
 namespace Handlers
 {
 
-ConnectionHandler::ConnectionHandler()
-: bluetoothService(std::make_shared<Connection::BluetoothService>())
-, wifiService(std::make_shared<Connection::WiFiService>())
+ConnectionHandler::ConnectionHandler(std::shared_ptr<MeasurementSerializer> &measurementSerializer)
+        : measSerializer(measurementSerializer)
+        , bluetoothService(std::make_shared<Connection::BluetoothService>(measurementSerializer))
+        , wifiService(std::make_shared<Connection::WiFiService>())
 {
     wifiService->getNewPreferences();
 

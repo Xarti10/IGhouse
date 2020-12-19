@@ -48,10 +48,11 @@ void LightSensor::initSensor()
 void LightSensor::measure()
 {
     tslSensor->TSL2581_Read_Channel();
-
+    float lightValue = tslSensor->calculateLux(0, NOM_INTEG_CYCLE);
     Serial.print("Lux = " );
-    Serial.print(tslSensor->calculateLux(2, NOM_INTEG_CYCLE));
+    Serial.print(lightValue);
     Serial.print("\n");
+    getMeasurement()->setMeasurementValue(lightValue);
 }
 
 }//namespace Drv

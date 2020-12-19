@@ -13,10 +13,9 @@ constexpr std::uint8_t waterLeverIndicatorPin = 26;
 constexpr std::uint8_t soilMoistureSensorPin = 34;
 constexpr std::uint8_t waterLeverSensorPin = 35;
 
-
-static constexpr float humidityLevelBound = 50.0;
-static constexpr float soilMoistureLevelBound = 30.0;
-static constexpr float lightLevelBound = 30.0;
+static constexpr float defaultHumidityLevelThreshold = 20.0;
+static constexpr float defaultSoilMoistureLevelThreshold = 30.0;
+static constexpr float defaultLightLevelThreshold = 20.0;
 }
 
 #endif //IGHOUSE_PINDEFINITIONS_HPP

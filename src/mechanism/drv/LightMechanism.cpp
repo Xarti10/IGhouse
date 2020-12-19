@@ -1,6 +1,7 @@
 #include "LightMechanism.hpp"
 #include "Arduino.h"
 #include <Utils/PinDefinitions.hpp>
+#include <Preferences.h>
 
 namespace IGHouse
 {
@@ -19,11 +20,16 @@ LightMechanism::LightMechanism(MechanismType mechType,
 
 void LightMechanism::monitorFunction()
 {
-    if(sensor->getMeasurement()->getMeasurementValue() < lightLevelBound)
+    Preferences preferences;
+    preferences.begin("Thresholds", false);
+    auto lightThreshold = preferences.getFloat("light", defaultLightLevelThreshold);
+    preferences.end();
+
+    if(sensor->getMeasurement()->getMeasurementValue() < lightThreshold)
     {
         turnOn();
     }
-    else if (sensor->getMeasurement()->getMeasurementValue() > lightLevelBound + 5)
+    else if (sensor->getMeasurement()->getMeasurementValue() > lightThreshold + 5)
     {
         turnOff();
     }

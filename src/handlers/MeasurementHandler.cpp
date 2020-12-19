@@ -2,14 +2,18 @@
 #include "FreeRTOS.h"
 #include "Arduino.h"
 #include <string>
+#include <Utils/MeasurementSerializer.hpp>
 
 namespace IGHouse
 {
 namespace Handlers
 {
 
-MeasurementHandler::MeasurementHandler(std::shared_ptr<SensorRepository> &sensorRepo, std::uint32_t stackDepth)
+MeasurementHandler::MeasurementHandler(std::shared_ptr<SensorRepository> &sensorRepo,
+                                       std::shared_ptr<MeasurementSerializer> &measurementSerializer,
+                                       std::uint32_t stackDepth)
 : sensorRepo(sensorRepo)
+, measSerializer(measurementSerializer)
 , stackSize(stackDepth)
 , taskHandle(nullptr)
 {
@@ -35,16 +39,18 @@ void MeasurementHandler::runMeasurements(void *params)
 
 [[noreturn]] void MeasurementHandler::measurements()
 {
+    Serial.println();
     Serial.println("MeasurementHandler task created");
     constexpr TickType_t taskDelay = 5000 / portTICK_PERIOD_MS;
 
     while(true)
     {
+        Serial.println("Measurements started");
         for (const auto &measurement : measurementList)
         {
             triggerSensorMeasurement(measurement);
         }
-
+        measSerializer->generateJsonSerializedMeasurementDataString();
         vTaskDelay(taskDelay);
     }
 }

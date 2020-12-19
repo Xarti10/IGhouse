@@ -4,6 +4,9 @@
 #include <nvs.h>
 #include <sstream>
 #include <iomanip>
+#include <connection/drv/Bluetooth/SensorReadingsCallbackHandler.hpp>
+#include <connection/drv/Bluetooth/SystemConfigCallbackHandler.hpp>
+#include "Cipher.h"
 
 
 namespace IGHouse
@@ -11,18 +14,23 @@ namespace IGHouse
 namespace Connection
 {
 
-BluetoothService::BluetoothService()
+BluetoothService::BluetoothService(std::shared_ptr<MeasurementSerializer> &measSerializer)
 : advertising(nullptr)
-, characteristic(nullptr)
+, wifiCharacteristic(nullptr)
+, sensorReadingsCharacteristic(nullptr)
+, systemConfigCharacteristic(nullptr)
 , service(nullptr)
 , server(nullptr)
 , accessPointName("")
-, deviceCallbackHandler(nullptr)
-, serverCallbackHandler(nullptr)
+, cipher(std::make_shared<Cipher>())
+, measSerializer(measSerializer)
 {
     createUniqueName();
-    serverCallbackHandler.reset(new Drv::Bluetooth::ServerCallbackHandler(advertising));
-    deviceCallbackHandler.reset(new Drv::Bluetooth::DeviceCallbackHandler(accessPointName, characteristic));
+
+    char *keyFromAccessPointName = new char[accessPointName.length()];
+    strcpy(keyFromAccessPointName, accessPointName.c_str());
+    cipher->setKey(keyFromAccessPointName);
+
     init();
 }
 
@@ -36,12 +44,12 @@ void BluetoothService::createUniqueName()
     esp_read_mac(baseMac, ESP_MAC_WIFI_STA);
 
     std::ostringstream stringBuffer;
-    stringBuffer << "ESP32-" << std::hex << std::setw(2) << (unsigned int) baseMac[0] << "-"
-                             << std::hex << std::setw(2) << (unsigned int) baseMac[1] << "-"
-                             << std::hex << std::setw(2) << (unsigned int) baseMac[2] << "-"
-                             << std::hex << std::setw(2) << (unsigned int) baseMac[3] << "-"
-                             << std::hex << std::setw(2) << (unsigned int) baseMac[4] << "-"
-                             << std::hex << std::setw(2) << (unsigned int) baseMac[5];
+    stringBuffer << "IGHouse-" << std::hex << std::setw(2) << (unsigned int) baseMac[0] << "-"
+                               << std::hex << std::setw(2) << (unsigned int) baseMac[1] << "-"
+                               << std::hex << std::setw(2) << (unsigned int) baseMac[2] << "-"
+                               << std::hex << std::setw(2) << (unsigned int) baseMac[3] << "-"
+                               << std::hex << std::setw(2) << (unsigned int) baseMac[4] << "-"
+                               << std::hex << std::setw(2) << (unsigned int) baseMac[5];
 
     accessPointName = stringBuffer.str().c_str();
     Serial.println(accessPointName);
@@ -54,32 +62,35 @@ void BluetoothService::init()
 
     // Create BLE Server
     server.reset(BLEDevice::createServer());
-    delay(50);
 
     // Create BLE Service
     service.reset(server->createService(BLEUUID(SERVICE_UUID),20));
-    delay(50);
 
     // Set server callbacks
-    server->setCallbacks(serverCallbackHandler.get());
-    delay(50);
+    server->setCallbacks(new Drv::Bluetooth::ServerCallbackHandler(advertising));
 
     // Create BLE Characteristic for WiFi settings
-    characteristic.reset(service->createCharacteristic(BLEUUID(CHARACTERISTIC_UUID),
-                                                       BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
+    wifiCharacteristic.reset(service->createCharacteristic(BLEUUID(WIFI_CHARACT_UUID),
+                                                           BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
     ));
-    delay(50);
 
-    characteristic->setCallbacks(deviceCallbackHandler.get());
-    delay(50);
+    wifiCharacteristic->setCallbacks(new Drv::Bluetooth::WiFiCallbackHandler(cipher));
+
+    sensorReadingsCharacteristic.reset(service->createCharacteristic(BLEUUID(SENSOR_READINGS_CHARACT_UUID),
+                                                                         BLECharacteristic::PROPERTY_READ));
+
+    sensorReadingsCharacteristic->setCallbacks(new Drv::Bluetooth::SensorReadingsCallbackHandler(cipher,measSerializer));
+
+    systemConfigCharacteristic.reset(service->createCharacteristic(BLEUUID(SYSTEM_CONFIG_CHARACT_UUID),
+                                                                   BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE));
+
+    systemConfigCharacteristic->setCallbacks(new Drv::Bluetooth::SystemConfigCallbackHandler(cipher));
 
     // Start the service
     service->start();
-    delay(50);
 
     // Start advertising
     advertising.reset(server->getAdvertising());
-    delay(50);
 
     advertising->start();
 }

@@ -15,9 +15,13 @@ namespace Handlers
 class ConnectionHandler
 {
 public:
-    ConnectionHandler();
+    ConnectionHandler()= delete;
+    explicit ConnectionHandler(std::shared_ptr<MeasurementSerializer> &measurementSerializer);
+    ~ConnectionHandler() = default;
 
 private:
+    std::shared_ptr<MeasurementSerializer> measSerializer;
+
     std::shared_ptr<Connection::BluetoothService> bluetoothService;
     std::shared_ptr<Connection::WiFiService> wifiService;
 };

@@ -21,6 +21,7 @@ private:
 //TODO: add all pointers from uml
     std::shared_ptr<SensorRepository> sensorRepo;
     std::shared_ptr<MechanismRepository> mechanismRepo;
+    std::shared_ptr<MeasurementSerializer> measSerializer;
     std::shared_ptr<Handlers::MeasurementHandler> measHandler;
     std::shared_ptr<Handlers::MechanismHandler> mechHandler;
     std::shared_ptr<Handlers::ConnectionHandler> connectionHandler;

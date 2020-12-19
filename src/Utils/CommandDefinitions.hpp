@@ -4,12 +4,19 @@
 namespace IGHouse
 {
 
-enum class Command : char
+enum class WiFiCommand : char
 {
     ERASE = 0,
     CONNECT_TO_WIFI,
     RESET,
-    GET_SENSOR_DATA,
+    UNKNOWN
+};
+
+enum class ThresholdsDefinition : char
+{
+    ERASE = 0,
+    SET_NEW_THRESHOLDS,
+    RESET,
     UNKNOWN
 };
 

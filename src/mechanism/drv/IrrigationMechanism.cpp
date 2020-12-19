@@ -2,6 +2,7 @@
 #include "Arduino.h"
 
 #include <Utils/PinDefinitions.hpp>
+#include <Preferences.h>
 
 namespace IGHouse
 {
@@ -20,11 +21,16 @@ IrrigationMechanism::IrrigationMechanism(MechanismType mechType,
 
 void IrrigationMechanism::monitorFunction()
 {
-    if(sensor->getMeasurement()->getMeasurementValue() < soilMoistureLevelBound)
+    Preferences preferences;
+    preferences.begin("Thresholds", false);
+    auto soilMoistureThreshold = preferences.getFloat("soilMoisture", defaultSoilMoistureLevelThreshold);
+    preferences.end();
+
+    if(sensor->getMeasurement()->getMeasurementValue() < soilMoistureThreshold)
     {
         turnOn();
     }
-    else if(sensor->getMeasurement()->getMeasurementValue() > soilMoistureLevelBound + 5.0)
+    else if(sensor->getMeasurement()->getMeasurementValue() > soilMoistureThreshold + 5.0)
     {
         turnOff();
     }

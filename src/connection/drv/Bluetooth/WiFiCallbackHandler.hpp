@@ -1,5 +1,5 @@
-#ifndef SZKLARNIA_DEVICECALLBACKHANDLER_HPP
-#define SZKLARNIA_DEVICECALLBACKHANDLER_HPP
+#ifndef SZKLARNIA_WIFICALLBACKHANDLER_HPP
+#define SZKLARNIA_WIFICALLBACKHANDLER_HPP
 
 #include "Arduino.h"
 
@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <memory>
 #include "Cipher.h"
+#include "CharacteristicCallbackHandler.hpp"
 
 namespace IGHouse
 {
@@ -25,27 +26,22 @@ namespace Drv
 namespace Bluetooth
 {
 
-class DeviceCallbackHandler : public BLECharacteristicCallbacks
+class WiFiCallbackHandler : public CharacteristicCallbackHandler
 {
 public:
-    DeviceCallbackHandler() = delete;
-    DeviceCallbackHandler(String &accessPointName,
-                          std::shared_ptr<BLECharacteristic> &characteristic,
-                          std::uint16_t jsonBufferSize = 256);
-    virtual ~DeviceCallbackHandler() = default;
+    WiFiCallbackHandler() = delete;
+    WiFiCallbackHandler(std::shared_ptr<Cipher> &cipher,
+                        std::uint16_t jsonBufferSize = 256);
+    virtual ~WiFiCallbackHandler() = default;
 
     void onWrite(BLECharacteristic *pCharacteristic) override;
     void onRead(BLECharacteristic *pCharacteristic) override;
 
 private:
-    String accessPointName;
     String ssid;
     String password;
     DynamicJsonDocument jsonBuffer;
-    std::shared_ptr<BLECharacteristic> characteristics;
-    std::shared_ptr<Cipher> cipher ;
 
-    String decodeData(BLECharacteristic *pCharacteristic);
     void fillWiFiCredentials(JsonVariant arguments);
     void eraseWiFiCredentials();
 };
@@ -55,4 +51,4 @@ private:
 }//namespace Connection
 }//namespace IGHouse
 
-#endif //SZKLARNIA_DEVICECALLBACKHANDLER_HPP
+#endif //SZKLARNIA_WIFICALLBACKHANDLER_HPP
