@@ -15,6 +15,7 @@
 #include <memory>
 #include <Utils/CommandDefinitions.hpp>
 #include <Utils/PinDefinitions.hpp>
+#include <Utils/PreferenceAdapter.hpp>
 
 namespace IGHouse
 {
@@ -66,27 +67,20 @@ void SystemConfigCallbackHandler::setNewThresholdsSettings(JsonVariant threshold
         Serial.println("Wrong ssid name was provided");
         return;
     }
-    auto soilMoisture = soilMoistureJson.as<float>();
-    auto humidity = humidityJson.as<float>();
-    auto light = lightJson.as<float>();
 
-    Preferences preferences;
-    preferences.begin("Thresholds", false);
-    preferences.putFloat("soilMoisture", soilMoisture);
-    preferences.putFloat("humidity", humidity);
-    preferences.putFloat("light", light);
-    preferences.end();
+    ThresholdsPreferences thresholdsPrefs;
+    thresholdsPrefs.soilMoisture = soilMoistureJson.as<float>();
+    thresholdsPrefs.humidity = humidityJson.as<float>();
+    thresholdsPrefs.light = lightJson.as<float>();
 
+    PreferencesAdapter::setThresholdsPreferences(thresholdsPrefs);
 }
 
 void SystemConfigCallbackHandler::eraseThresholds()
 {
     Serial.println(__FUNCTION__);
     Serial.println("Received erase command");
-    Preferences preferences;
-    preferences.begin("Thresholds", false);
-    preferences.clear();
-    preferences.end();
+    PreferencesAdapter::eraseThresholdsPreferences();
 }
 
 void SystemConfigCallbackHandler::onRead(BLECharacteristic *pCharacteristic)
@@ -94,22 +88,15 @@ void SystemConfigCallbackHandler::onRead(BLECharacteristic *pCharacteristic)
     Serial.println("BLE onRead request");
     String thresholds = "";
 
-    Preferences preferences;
-    preferences.begin("Thresholds", false);
-    auto soilMoistureThreshold = preferences.getFloat("soilMoisture", defaultSoilMoistureLevelThreshold);
-    auto humidityThreshold = preferences.getFloat("humidity", defaultHumidityLevelThreshold);
-    auto lightThreshold = preferences.getFloat("light", defaultLightLevelThreshold);
-    preferences.end();
-
     JsonArray thresholdArray = jsonBuffer.createNestedArray("Thresholds");
 
     auto soilMoisture = thresholdArray.createNestedObject();
     auto humidity = thresholdArray.createNestedObject();
     auto light = thresholdArray.createNestedObject();
 
-    soilMoisture["soilMoisture"] = soilMoistureThreshold;
-    humidity["humidity"] = humidityThreshold;
-    light["light"] = lightThreshold;
+    soilMoisture["soilMoisture"] = soilMoisture;
+    humidity["humidity"] = humidity;
+    light["light"] = light;
 
     // Convert JSON into a string
     serializeJson(jsonBuffer, thresholds);

@@ -13,13 +13,19 @@ namespace Connection
 class WiFiService
 {
 public:
+    WiFiService(TaskHandle_t &taskHandle);
+
     void connectWiFi();
-    void getNewPreferences();
+    bool getNewPreferences();
     bool scanWiFi();
 
 private:
     String ssid;
     String password;
+    static TaskHandle_t connectionTaskHandler;
+
+    static void gotIP(system_event_id_t event);
+    static void lostCon(system_event_id_t event);
 };
 
 }//namespace Connection

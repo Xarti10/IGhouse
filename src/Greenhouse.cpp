@@ -24,6 +24,7 @@ void IGHouse::Greenhouse::runMeasurements()
 {
     measHandler->runMeasuremenentTask();
     mechHandler->runMechanismMonitorTask();
+    connectionHandler->runConnectionMonitorTask();
 }
 
 void IGHouse::Greenhouse::publishMeasurements()

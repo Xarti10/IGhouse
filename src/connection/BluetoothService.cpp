@@ -14,7 +14,7 @@ namespace IGHouse
 namespace Connection
 {
 
-BluetoothService::BluetoothService(std::shared_ptr<MeasurementSerializer> &measSerializer)
+BluetoothService::BluetoothService(std::shared_ptr<MeasurementSerializer> &measSerializer, TaskHandle_t &taskHandle)
 : advertising(nullptr)
 , wifiCharacteristic(nullptr)
 , sensorReadingsCharacteristic(nullptr)
@@ -24,6 +24,7 @@ BluetoothService::BluetoothService(std::shared_ptr<MeasurementSerializer> &measS
 , accessPointName("")
 , cipher(std::make_shared<Cipher>())
 , measSerializer(measSerializer)
+, connectionTaskHandler(taskHandle)
 {
     createUniqueName();
 
@@ -74,7 +75,7 @@ void BluetoothService::init()
                                                            BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
     ));
 
-    wifiCharacteristic->setCallbacks(new Drv::Bluetooth::WiFiCallbackHandler(cipher));
+    wifiCharacteristic->setCallbacks(new Drv::Bluetooth::WiFiCallbackHandler(cipher, connectionTaskHandler));
 
     sensorReadingsCharacteristic.reset(service->createCharacteristic(BLEUUID(SENSOR_READINGS_CHARACT_UUID),
                                                                          BLECharacteristic::PROPERTY_READ));

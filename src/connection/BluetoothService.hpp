@@ -28,7 +28,7 @@ class BluetoothService
 {
 public:
     BluetoothService() = delete;
-    BluetoothService(std::shared_ptr<MeasurementSerializer> &measSerializer);
+    BluetoothService(std::shared_ptr<MeasurementSerializer> &measSerializer, TaskHandle_t &taskHandle);
     ~BluetoothService();
 
 private:
@@ -41,6 +41,7 @@ private:
     String accessPointName;
     std::shared_ptr<Cipher> cipher;
     std::shared_ptr<MeasurementSerializer> measSerializer;
+    TaskHandle_t connectionTaskHandler;
 
     void createUniqueName();
     void init();

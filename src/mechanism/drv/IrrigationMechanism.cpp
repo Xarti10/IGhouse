@@ -3,6 +3,7 @@
 
 #include <Utils/PinDefinitions.hpp>
 #include <Preferences.h>
+#include <Utils/PreferenceAdapter.hpp>
 
 namespace IGHouse
 {
@@ -21,10 +22,7 @@ IrrigationMechanism::IrrigationMechanism(MechanismType mechType,
 
 void IrrigationMechanism::monitorFunction()
 {
-    Preferences preferences;
-    preferences.begin("Thresholds", false);
-    auto soilMoistureThreshold = preferences.getFloat("soilMoisture", defaultSoilMoistureLevelThreshold);
-    preferences.end();
+    auto soilMoistureThreshold = PreferencesAdapter::getThresholdsPreferences().soilMoisture;
 
     if(sensor->getMeasurement()->getMeasurementValue() < soilMoistureThreshold)
     {

@@ -31,6 +31,7 @@ class WiFiCallbackHandler : public CharacteristicCallbackHandler
 public:
     WiFiCallbackHandler() = delete;
     WiFiCallbackHandler(std::shared_ptr<Cipher> &cipher,
+                        TaskHandle_t &taskHandle,
                         std::uint16_t jsonBufferSize = 256);
     virtual ~WiFiCallbackHandler() = default;
 
@@ -38,8 +39,7 @@ public:
     void onRead(BLECharacteristic *pCharacteristic) override;
 
 private:
-    String ssid;
-    String password;
+    TaskHandle_t connectionTaskHandler;
     DynamicJsonDocument jsonBuffer;
 
     void fillWiFiCredentials(JsonVariant arguments);

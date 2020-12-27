@@ -2,6 +2,7 @@
 #include "Arduino.h"
 #include <Utils/PinDefinitions.hpp>
 #include <Preferences.h>
+#include <Utils/PreferenceAdapter.hpp>
 
 namespace IGHouse
 {
@@ -20,10 +21,7 @@ LightMechanism::LightMechanism(MechanismType mechType,
 
 void LightMechanism::monitorFunction()
 {
-    Preferences preferences;
-    preferences.begin("Thresholds", false);
-    auto lightThreshold = preferences.getFloat("light", defaultLightLevelThreshold);
-    preferences.end();
+    auto lightThreshold = PreferencesAdapter::getThresholdsPreferences().light;
 
     if(sensor->getMeasurement()->getMeasurementValue() < lightThreshold)
     {

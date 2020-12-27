@@ -36,7 +36,7 @@ void MechanismHandler::runMechanismMonitor(void *params)
 [[noreturn]] void MechanismHandler::mechanismMonitor()
 {
     Serial.println("MeasurementHandler task created");
-    constexpr TickType_t taskDelay = 10000 / portTICK_PERIOD_MS;
+    constexpr TickType_t taskDelay =  pdMS_TO_TICKS(10000);
 
     while(true)
     {

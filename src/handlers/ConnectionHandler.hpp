@@ -16,14 +16,26 @@ class ConnectionHandler
 {
 public:
     ConnectionHandler()= delete;
-    explicit ConnectionHandler(std::shared_ptr<MeasurementSerializer> &measurementSerializer);
-    ~ConnectionHandler() = default;
+    explicit ConnectionHandler(std::shared_ptr<MeasurementSerializer> &measurementSerializer,
+                               std::uint32_t stackDepth = configMINIMAL_STACK_SIZE);
+    ~ConnectionHandler();
+
+    void runConnectionMonitorTask();
+    [[noreturn]] void connectionMonitor();
 
 private:
     std::shared_ptr<MeasurementSerializer> measSerializer;
-
+    std::uint32_t stackSize;
+    TaskHandle_t taskHandle;
     std::shared_ptr<Connection::BluetoothService> bluetoothService;
     std::shared_ptr<Connection::WiFiService> wifiService;
+    bool isConnected;
+    bool hasCredentials;
+    bool connectionStatusChanged;
+    bool initialized;
+
+    static void runConnectionMonitor(void *params);
+    void connectToWiFi();
 };
 
 }//namespace Handlers

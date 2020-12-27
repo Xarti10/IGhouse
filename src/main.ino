@@ -17,6 +17,10 @@ void setup()
 
 void loop()
 {
-    Serial.println(esp_get_free_heap_size());
+    Serial.print("Free heap size: ");
+    Serial.print(esp_get_free_heap_size());
+    Serial.print(", Minimal free heap size: ");
+    Serial.println(esp_get_minimum_free_heap_size());
+
     delay(5000);
 }

@@ -1,5 +1,6 @@
 #include <Utils/PinDefinitions.hpp>
 #include <Preferences.h>
+#include <Utils/PreferenceAdapter.hpp>
 #include "SprinklerMechanism.hpp"
 #include "Arduino.h"
 
@@ -20,10 +21,7 @@ SprinklerMechanism::SprinklerMechanism(MechanismType mechType,
 
 void IGHouse::Mechanism::Drv::SprinklerMechanism::monitorFunction()
 {
-    Preferences preferences;
-    preferences.begin("Thresholds", false);
-    auto humidityThreshold = preferences.getFloat("humidity", defaultHumidityLevelThreshold);
-    preferences.end();
+    auto humidityThreshold = PreferencesAdapter::getThresholdsPreferences().humidity;
 
     if(sensor->getMeasurement()->getMeasurementValue() < humidityThreshold)
     {

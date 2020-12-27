@@ -10,7 +10,10 @@
 #include <map>
 #include "Arduino.h"
 #include "Utils/CommandDefinitions.hpp"
+#include "Utils/PreferenceAdapter.hpp"
 #include "Cipher.h"
+#include "FreeRTOS.h"
+
 
 namespace IGHouse
 {
@@ -43,10 +46,10 @@ WiFiCommand translateStringToCommand(String commandString)
 }//namespace
 
 WiFiCallbackHandler::WiFiCallbackHandler(std::shared_ptr<Cipher> &cipher,
+                                         TaskHandle_t &taskHandle,
                                          std::uint16_t jsonBufferSize)
 : CharacteristicCallbackHandler(cipher)
-, ssid("xxx")
-, password("xxxxxx")
+, connectionTaskHandler(taskHandle)
 , jsonBuffer(jsonBufferSize)
 {
 }
@@ -62,40 +65,26 @@ void WiFiCallbackHandler::fillWiFiCredentials(JsonVariant arguments)
         Serial.println("Wrong ssid name was provided");
         return;
     }
-    ssid = ssidFromJson.as<String>();
-    password = passwordFromJson.isNull() ? "" : passwordFromJson.as<String>();
-
-    Preferences preferences;
-    preferences.begin("WiFiCred", false);
-    preferences.putString("ssid", ssid);
-    preferences.putString("password", password);
-    preferences.putBool("valid", true);
-    preferences.end();
+    WiFiPreferences wifiPrefs;
+    wifiPrefs.ssid = ssidFromJson.as<String>();
+    wifiPrefs.password = passwordFromJson.isNull() ? "" : passwordFromJson.as<String>();
+    wifiPrefs.valid = true;
+    PreferencesAdapter::setWiFiPreferences(wifiPrefs);
 
     Serial.println("Received over bluetooth:");
-    Serial.println("primary SSID: " + ssid + " password: " + password);
-//    connStatusChanged = true;
-//    hasCredentials = true;
+    Serial.println("primary SSID: " +  wifiPrefs.ssid + " password: " + wifiPrefs.password);
+    xTaskNotify(connectionTaskHandler, 0x01, eSetBits);
+
 }
 
 void WiFiCallbackHandler::eraseWiFiCredentials()
 {
     Serial.println(__FUNCTION__);
     Serial.println("Received erase command");
-    Preferences preferences;
-    preferences.begin("WiFiCred", false);
-    preferences.clear();
-    preferences.end();
-//    connStatusChanged = true;
-//    hasCredentials = false;
-    ssid = "";
-    password = "";
 
-    int err;
-    err = nvs_flash_init();
-    Serial.println("nvs_flash_init: " + err);
-    err = nvs_flash_erase();
-    Serial.println("nvs_flash_erase: " + err);
+    PreferencesAdapter::eraseWiFiPreferences();
+
+    xTaskNotify(connectionTaskHandler, 0x02, eSetBits);
 }
 
 void WiFiCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
@@ -104,7 +93,8 @@ void WiFiCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
     /** Json object for incoming data */
     Serial.println("On write request");
     deserializeJson(jsonBuffer, decodeData(pCharacteristic));
-    jsonBuffer.shrinkToFit();
+    Serial.print("Translated Json: ");
+    Serial.println(jsonBuffer.as<String>());
 
     JsonObject jsonIn = jsonBuffer.as<JsonObject>();
     if (!jsonIn.isNull())
@@ -117,7 +107,7 @@ void WiFiCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
                 case WiFiCommand::CONNECT_TO_WIFI:
                 {
                     Serial.println("Command CONNECT_TO_WIFI was called");
-                    JsonVariant arguments = jsonIn["arguments"];
+                    JsonVariant arguments = jsonIn["arguments"][0];
                     if(arguments.isNull())
                     {
                         Serial.println("No arumgents provided, could not connect to WiFi");
@@ -137,7 +127,6 @@ void WiFiCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
                     Serial.println("Command RESET was called");
 //                    WiFi.disconnect();
                     esp_restart();
-                    break;
                 }
                 case WiFiCommand::UNKNOWN:
                     break;
@@ -156,14 +145,10 @@ void WiFiCallbackHandler::onRead(BLECharacteristic *pCharacteristic)
     Serial.println("BLE onRead request");
     String wifiCredentials;
 
-    Preferences preferences;
-    preferences.begin("WiFiCred", false);
-    ssid = preferences.getString("ssid");
-    password = preferences.getString("password");
-    preferences.end();
+    auto wifiPrefs = PreferencesAdapter::getWiFiPreferences();
 
-    jsonBuffer["ssid"] = ssid;
-    jsonBuffer["password"] = password;
+    jsonBuffer["ssid"] = wifiPrefs.ssid;
+    jsonBuffer["password"] = wifiPrefs.password;
 
     Serial.print("Stored settings: ");
     Serial.print(jsonBuffer["ssid"].as<String>());
