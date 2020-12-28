@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <connection/drv/Bluetooth/SensorReadingsCallbackHandler.hpp>
 #include <connection/drv/Bluetooth/SystemConfigCallbackHandler.hpp>
-#include "Cipher.h"
+#include "CipherAES.h"
 
 
 namespace IGHouse
@@ -14,20 +14,22 @@ namespace IGHouse
 namespace Connection
 {
 
-BluetoothService::BluetoothService(std::shared_ptr<MeasurementSerializer> &measSerializer, TaskHandle_t &taskHandle)
+BluetoothService::BluetoothService(std::shared_ptr<MeasurementSerializer> &measSerializer,
+                                   std::shared_ptr<ThresholdSerializer> &thresholdSerializer,
+                                   TaskHandle_t &taskHandle,
+                                   String &apName)
 : advertising(nullptr)
 , wifiCharacteristic(nullptr)
 , sensorReadingsCharacteristic(nullptr)
 , systemConfigCharacteristic(nullptr)
 , service(nullptr)
 , server(nullptr)
-, accessPointName("")
-, cipher(std::make_shared<Cipher>())
+, accessPointName(apName)
+, cipher(std::make_shared<CipherAES>())
 , measSerializer(measSerializer)
+, thresholdSerializer(thresholdSerializer)
 , connectionTaskHandler(taskHandle)
 {
-    createUniqueName();
-
     char *keyFromAccessPointName = new char[accessPointName.length()];
     strcpy(keyFromAccessPointName, accessPointName.c_str());
     cipher->setKey(keyFromAccessPointName);
@@ -37,23 +39,6 @@ BluetoothService::BluetoothService(std::shared_ptr<MeasurementSerializer> &measS
 
 BluetoothService::~BluetoothService()
 {
-}
-
-void BluetoothService::createUniqueName()
-{
-    std::uint8_t baseMac[6];
-    esp_read_mac(baseMac, ESP_MAC_WIFI_STA);
-
-    std::ostringstream stringBuffer;
-    stringBuffer << "IGHouse-" << std::hex << std::setw(2) << (unsigned int) baseMac[0] << "-"
-                               << std::hex << std::setw(2) << (unsigned int) baseMac[1] << "-"
-                               << std::hex << std::setw(2) << (unsigned int) baseMac[2] << "-"
-                               << std::hex << std::setw(2) << (unsigned int) baseMac[3] << "-"
-                               << std::hex << std::setw(2) << (unsigned int) baseMac[4] << "-"
-                               << std::hex << std::setw(2) << (unsigned int) baseMac[5];
-
-    accessPointName = stringBuffer.str().c_str();
-    Serial.println(accessPointName);
 }
 
 void BluetoothService::init()
@@ -85,7 +70,7 @@ void BluetoothService::init()
     systemConfigCharacteristic.reset(service->createCharacteristic(BLEUUID(SYSTEM_CONFIG_CHARACT_UUID),
                                                                    BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE));
 
-    systemConfigCharacteristic->setCallbacks(new Drv::Bluetooth::SystemConfigCallbackHandler(cipher));
+    systemConfigCharacteristic->setCallbacks(new Drv::Bluetooth::SystemConfigCallbackHandler(cipher, thresholdSerializer));
 
     // Start the service
     service->start();

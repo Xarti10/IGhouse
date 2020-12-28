@@ -9,7 +9,7 @@
 #include "BLEDevice.h"
 #include "BLEAdvertising.h"
 
-#include "Cipher.h"
+#include "CipherAES.h"
 
 namespace IGHouse
 {
@@ -20,7 +20,7 @@ namespace Drv
 namespace Bluetooth
 {
 
-CharacteristicCallbackHandler::CharacteristicCallbackHandler(std::shared_ptr<Cipher> &cipher)
+CharacteristicCallbackHandler::CharacteristicCallbackHandler(std::shared_ptr<CipherAES> &cipher)
         : cipher(cipher)
 {
 }

@@ -11,7 +11,7 @@
 #include "Arduino.h"
 #include "Utils/CommandDefinitions.hpp"
 #include "Utils/PreferenceAdapter.hpp"
-#include "Cipher.h"
+#include "CipherAES.h"
 #include "FreeRTOS.h"
 
 
@@ -45,7 +45,7 @@ WiFiCommand translateStringToCommand(String commandString)
 
 }//namespace
 
-WiFiCallbackHandler::WiFiCallbackHandler(std::shared_ptr<Cipher> &cipher,
+WiFiCallbackHandler::WiFiCallbackHandler(std::shared_ptr<CipherAES> &cipher,
                                          TaskHandle_t &taskHandle,
                                          std::uint16_t jsonBufferSize)
 : CharacteristicCallbackHandler(cipher)

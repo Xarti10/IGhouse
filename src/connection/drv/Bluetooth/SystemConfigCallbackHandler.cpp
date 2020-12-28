@@ -9,7 +9,7 @@
 #include <ArduinoJson.h>
 #include <Preferences.h>
 
-#include "Cipher.h"
+#include "CipherAES.h"
 
 #include <cstdint>
 #include <memory>
@@ -47,9 +47,12 @@ ThresholdsDefinition translateStringToCommand(String commandString)
 
 }
 
-SystemConfigCallbackHandler::SystemConfigCallbackHandler(std::shared_ptr<Cipher> &cipher, std::uint16_t jsonBufferSize)
+SystemConfigCallbackHandler::SystemConfigCallbackHandler(std::shared_ptr<CipherAES> &cipher,
+                                                         std::shared_ptr<ThresholdSerializer> &thresholdSerializer,
+                                                         std::uint16_t jsonBufferSize)
 : CharacteristicCallbackHandler(cipher)
 , jsonBuffer(jsonBufferSize)
+, thresholdSerializer(thresholdSerializer)
 {
 
 }
@@ -88,20 +91,7 @@ void SystemConfigCallbackHandler::onRead(BLECharacteristic *pCharacteristic)
     Serial.println("BLE onRead request");
     String thresholds = "";
 
-    JsonArray thresholdArray = jsonBuffer.createNestedArray("Thresholds");
-
-    auto soilMoisture = thresholdArray.createNestedObject();
-    auto humidity = thresholdArray.createNestedObject();
-    auto light = thresholdArray.createNestedObject();
-
-    soilMoisture["soilMoisture"] = soilMoisture;
-    humidity["humidity"] = humidity;
-    light["light"] = light;
-
-    // Convert JSON into a string
-    serializeJson(jsonBuffer, thresholds);
-
-    String encodedString = cipher->encryptString(thresholds);
+    String encodedString = cipher->encryptString(thresholdSerializer->getThresholdData());
 
     pCharacteristic->setValue(std::string(encodedString.c_str()));
 
@@ -114,7 +104,6 @@ void SystemConfigCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
     /** Json object for incoming data */
     Serial.println("On write request");
     deserializeJson(jsonBuffer, decodeData(pCharacteristic));
-    jsonBuffer.shrinkToFit();
 
     JsonObject jsonIn = jsonBuffer.as<JsonObject>();
     if (!jsonIn.isNull())
@@ -127,7 +116,7 @@ void SystemConfigCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
                 case ThresholdsDefinition::SET_NEW_THRESHOLDS:
                 {
                     Serial.println("Command SET_NEW_THRESHOLDS was called");
-                    JsonVariant arguments = jsonIn["arguments"];
+                    JsonVariant arguments = jsonIn["arguments"][0];
                     if(arguments.isNull())
                     {
                         Serial.println("No arumgents provided, could not connect to WiFi");

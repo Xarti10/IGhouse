@@ -12,7 +12,7 @@
 #include <cstdint>
 #include <memory>
 #include <Utils/MeasurementSerializer.hpp>
-#include "Cipher.h"
+#include "CipherAES.h"
 #include "CharacteristicCallbackHandler.hpp"
 
 namespace IGHouse
@@ -28,7 +28,7 @@ class SensorReadingsCallbackHandler : public CharacteristicCallbackHandler
 {
 public:
     SensorReadingsCallbackHandler() = delete;
-    explicit SensorReadingsCallbackHandler(std::shared_ptr<Cipher> &cipher,
+    explicit SensorReadingsCallbackHandler(std::shared_ptr<CipherAES> &cipher,
                                            std::shared_ptr<MeasurementSerializer> &measurementSerializer);
     virtual ~SensorReadingsCallbackHandler() = default;
 

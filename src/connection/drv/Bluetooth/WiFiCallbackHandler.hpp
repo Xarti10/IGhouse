@@ -14,7 +14,7 @@
 
 #include <cstdint>
 #include <memory>
-#include "Cipher.h"
+#include "CipherAES.h"
 #include "CharacteristicCallbackHandler.hpp"
 
 namespace IGHouse
@@ -30,7 +30,7 @@ class WiFiCallbackHandler : public CharacteristicCallbackHandler
 {
 public:
     WiFiCallbackHandler() = delete;
-    WiFiCallbackHandler(std::shared_ptr<Cipher> &cipher,
+    WiFiCallbackHandler(std::shared_ptr<CipherAES> &cipher,
                         TaskHandle_t &taskHandle,
                         std::uint16_t jsonBufferSize = 256);
     virtual ~WiFiCallbackHandler() = default;

@@ -3,6 +3,8 @@
 #include <connection/BluetoothService.hpp>
 #include <connection/WiFiService.hpp>
 #include <memory>
+#include <sstream>
+#include <iomanip>
 #include "FreeRTOS.h"
 
 
@@ -11,8 +13,11 @@ namespace IGHouse
 namespace Handlers
 {
 
-ConnectionHandler::ConnectionHandler(std::shared_ptr<MeasurementSerializer> &measurementSerializer, std::uint32_t stackDepth)
+ConnectionHandler::ConnectionHandler(std::shared_ptr<MeasurementSerializer> &measurementSerializer,
+                                     std::shared_ptr<ThresholdSerializer> &thresholdSerializer,
+                                     std::uint32_t stackDepth)
 : measSerializer(measurementSerializer)
+, thresholdSerializer(thresholdSerializer)
 , stackSize(stackDepth)
 , taskHandle(nullptr)
 , bluetoothService(nullptr)
@@ -21,7 +26,10 @@ ConnectionHandler::ConnectionHandler(std::shared_ptr<MeasurementSerializer> &mea
 , hasCredentials(false)
 , connectionStatusChanged(false)
 , initialized(false)
+, accessPointName("")
+, serverClientService(nullptr)
 {
+    createUniqueName();
 }
 
 ConnectionHandler::~ConnectionHandler()
@@ -37,12 +45,30 @@ void ConnectionHandler::connectToWiFi()
     }
 }
 
+void ConnectionHandler::createUniqueName()
+{
+    std::uint8_t baseMac[6];
+    esp_read_mac(baseMac, ESP_MAC_WIFI_STA);
+
+    std::ostringstream stringBuffer;
+    stringBuffer << "IGHouse-" << std::hex << std::setw(2) << (unsigned int) baseMac[0] << "-"
+                 << std::hex << std::setw(2) << (unsigned int) baseMac[1] << "-"
+                 << std::hex << std::setw(2) << (unsigned int) baseMac[2] << "-"
+                 << std::hex << std::setw(2) << (unsigned int) baseMac[3] << "-"
+                 << std::hex << std::setw(2) << (unsigned int) baseMac[4] << "-"
+                 << std::hex << std::setw(2) << (unsigned int) baseMac[5];
+
+    accessPointName = stringBuffer.str().c_str();
+    Serial.println(accessPointName);
+}
+
 void ConnectionHandler::runConnectionMonitorTask()
 {
     xTaskCreate(&runConnectionMonitor, "Connection Measurements", stackSize, this, tskIDLE_PRIORITY, &taskHandle);
     delay(500);
-    bluetoothService.reset( new Connection::BluetoothService(measSerializer, taskHandle));
+    bluetoothService.reset( new Connection::BluetoothService(measSerializer, thresholdSerializer, taskHandle, accessPointName));
     wifiService.reset(new Connection::WiFiService(taskHandle));
+    serverClientService.reset(new Connection::ServerClientService(measSerializer, thresholdSerializer, accessPointName));
     hasCredentials = wifiService->getNewPreferences();
     if (hasCredentials)
     {
@@ -61,6 +87,7 @@ void ConnectionHandler::connectionMonitor()
 
     while(true)
     {
+        serverClientService->runLoop();
         notifyResult = xTaskNotifyWait(0X00, ULONG_MAX, &notificationValue, taskDelay*5);
         isConnected = WiFi.isConnected();
 

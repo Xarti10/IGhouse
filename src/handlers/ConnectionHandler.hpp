@@ -6,6 +6,8 @@
 
 #include <connection/BluetoothService.hpp>
 #include <connection/WiFiService.hpp>
+#include <Utils/ThresholdSerializer.hpp>
+#include <connection/ServerClientService.hpp>
 
 namespace IGHouse
 {
@@ -17,6 +19,7 @@ class ConnectionHandler
 public:
     ConnectionHandler()= delete;
     explicit ConnectionHandler(std::shared_ptr<MeasurementSerializer> &measurementSerializer,
+                               std::shared_ptr<ThresholdSerializer> &thresholdSerializer,
                                std::uint32_t stackDepth = configMINIMAL_STACK_SIZE);
     ~ConnectionHandler();
 
@@ -25,6 +28,7 @@ public:
 
 private:
     std::shared_ptr<MeasurementSerializer> measSerializer;
+    std::shared_ptr<ThresholdSerializer> thresholdSerializer;
     std::uint32_t stackSize;
     TaskHandle_t taskHandle;
     std::shared_ptr<Connection::BluetoothService> bluetoothService;
@@ -33,7 +37,10 @@ private:
     bool hasCredentials;
     bool connectionStatusChanged;
     bool initialized;
+    String accessPointName;
+    std::shared_ptr<Connection::ServerClientService> serverClientService;
 
+    void createUniqueName();
     static void runConnectionMonitor(void *params);
     void connectToWiFi();
 };

@@ -12,7 +12,8 @@
 
 #include <cstdint>
 #include <memory>
-#include "Cipher.h"
+#include <Utils/ThresholdSerializer.hpp>
+#include "CipherAES.h"
 #include "CharacteristicCallbackHandler.hpp"
 
 namespace IGHouse
@@ -28,7 +29,7 @@ class SystemConfigCallbackHandler : public CharacteristicCallbackHandler
 {
 public:
     SystemConfigCallbackHandler() = delete;
-    explicit SystemConfigCallbackHandler(std::shared_ptr<Cipher> &cipher, std::uint16_t jsonBufferSize = 256);
+    explicit SystemConfigCallbackHandler(std::shared_ptr<CipherAES> &cipher,std::shared_ptr<ThresholdSerializer> &thresholdSerializer, std::uint16_t jsonBufferSize = 256);
     virtual ~SystemConfigCallbackHandler() = default;
 
     void onRead(BLECharacteristic *pCharacteristic) override;
@@ -36,6 +37,7 @@ public:
 
 private:
     DynamicJsonDocument jsonBuffer;
+    std::shared_ptr<ThresholdSerializer> thresholdSerializer;
 
     void setNewThresholdsSettings(JsonVariant thresholds);
     void eraseThresholds();

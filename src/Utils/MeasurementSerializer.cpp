@@ -66,5 +66,29 @@ const String &MeasurementSerializer::getMeasurementData() const
     return measurementData;
 }
 
+String MeasurementSerializer::getGeneratedJsonSerializedSensorDataWithApNameString(String &apName)
+{
+    Serial.println(__FUNCTION__);
+
+    String result;
+    jsonBuffer["DeviceName"] = apName;
+    JsonArray measurementArray = jsonBuffer.createNestedArray("Measurements");
+
+    for(auto &item : sensorRepo->getSensorMap())
+    {
+        JsonObject measurementObject = measurementArray.createNestedObject();
+        measurementObject["Type"] = translateMeasurementTypeToString(item.first);
+        measurementObject["Value"] = item.second->getMeasurement()->getMeasurementValue();
+//        Serial.print("Object " + jsonBuffer.as<String>());
+//        measurementArray.add(measurementObject);
+    }
+
+    Serial.print("Data to be serialized: ");
+    Serial.println(jsonBuffer.as<String>());
+    serializeJson(jsonBuffer, result);
+
+    return result;
+}
+
 
 }//namespace IGHouse

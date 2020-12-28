@@ -9,7 +9,7 @@ namespace Drv
 namespace Bluetooth
 {
 
-SensorReadingsCallbackHandler::SensorReadingsCallbackHandler(std::shared_ptr<Cipher> &cipher,
+SensorReadingsCallbackHandler::SensorReadingsCallbackHandler(std::shared_ptr<CipherAES> &cipher,
                                                              std::shared_ptr<MeasurementSerializer> &measurementSerializer)
 : CharacteristicCallbackHandler(cipher)
 , measSerializer(measurementSerializer)

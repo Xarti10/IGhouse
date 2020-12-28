@@ -10,7 +10,7 @@
 #include "BLEDevice.h"
 #include "BLEAdvertising.h"
 
-#include "Cipher.h"
+#include "CipherAES.h"
 
 
 namespace IGHouse
@@ -26,12 +26,12 @@ class CharacteristicCallbackHandler : public BLECharacteristicCallbacks
 {
 public:
     CharacteristicCallbackHandler() = delete;
-    CharacteristicCallbackHandler(std::shared_ptr<Cipher> &cipher);
+    CharacteristicCallbackHandler(std::shared_ptr<CipherAES> &cipher);
     virtual ~CharacteristicCallbackHandler() = default;
 
     String decodeData(BLECharacteristic *pCharacteristic);
 protected:
-    std::shared_ptr<Cipher> cipher;
+    std::shared_ptr<CipherAES> cipher;
 };
 
 }//namesapce Bluetooth

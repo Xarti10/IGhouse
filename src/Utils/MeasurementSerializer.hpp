@@ -18,6 +18,7 @@ public:
     ~MeasurementSerializer() = default;
 
     void generateJsonSerializedMeasurementDataString();
+    String getGeneratedJsonSerializedSensorDataWithApNameString(String &apName);
     const String &getMeasurementData() const;
 
 private:
