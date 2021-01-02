@@ -27,6 +27,7 @@ private:
     static std::shared_ptr<MeasurementSerializer> measSerializer;
     static std::shared_ptr<ThresholdSerializer> thresholdSerializer;
     static std::shared_ptr<SocketIoClient> webSocket;
+    static std::shared_ptr<WiFiClient> client;
 
     static bool isConnected;
 
@@ -40,10 +41,6 @@ private:
     static void updateThresholdStatuses(const char * payload, size_t length);
     static void sendSensorData(const char *payload, size_t length);
     static void sendThresholdStatuses(const char *payload, size_t length);
-
-
-
-
 };
 
 }//namespace Connection

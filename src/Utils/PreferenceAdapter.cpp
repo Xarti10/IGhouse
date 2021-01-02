@@ -1,5 +1,6 @@
 #include "PreferenceAdapter.hpp"
 #include <Utils/PinDefinitions.hpp>
+#include <nvs_flash.h>
 
 namespace IGHouse
 {

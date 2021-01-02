@@ -25,25 +25,37 @@ void WaterLevelIndicatorMechanism::monitorFunction()
 {
     auto sensorReadingValue = sensor->getMeasurement()->getMeasurementValue();
 
-    if(sensorReadingValue < 20)
+    Serial.print("Water level value in water level monitor function: ");
+    Serial.println(sensorReadingValue);
+    delay(50);
+    if(sensorReadingValue < 20.0f)
     {
+        Serial.print("Case 1 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
         for (int i = 0; i < 8; ++i)
         {
             waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(255, 0, 0));
             waterLevelIndicator->show();
         }
     }
-    else if(sensorReadingValue >= 20 && sensorReadingValue < 30)
+    else if(sensorReadingValue >= 20.0f && sensorReadingValue < 30.0f)
     {
-        waterLevelIndicator->setPixelColor(1, waterLevelIndicator->Color(255, 0, 0));
+        Serial.print("Case 2 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
+        waterLevelIndicator->setPixelColor(0, waterLevelIndicator->Color(255, 0, 0));
         for (int i = 1; i < 8; ++i)
         {
             waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 0, 0));
             waterLevelIndicator->show();
         }
     }
-    else if(sensorReadingValue >= 30 && sensorReadingValue < 40)
+    else if(sensorReadingValue >= 30.0f && sensorReadingValue < 40.0f)
     {
+        Serial.print("Case 3 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
         waterLevelIndicator->setPixelColor(0, waterLevelIndicator->Color(255, 0, 0));
         waterLevelIndicator->setPixelColor(1, waterLevelIndicator->Color(255, 0, 0));
         for (int i = 2; i < 8; ++i)
@@ -52,8 +64,11 @@ void WaterLevelIndicatorMechanism::monitorFunction()
             waterLevelIndicator->show();
         }
     }
-    else if(sensorReadingValue >= 40  && sensorReadingValue < 50 )
+    else if(sensorReadingValue >= 40.0f  && sensorReadingValue < 50.0f )
     {
+        Serial.print("Case 4 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
         for (int i = 0; i < 3; ++i)
         {
             waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(255, 255, 0));
@@ -64,8 +79,11 @@ void WaterLevelIndicatorMechanism::monitorFunction()
             waterLevelIndicator->show();
         }
     }
-    else if(sensorReadingValue >= 50  && sensorReadingValue < 60)
+    else if(sensorReadingValue >= 50.0f  && sensorReadingValue < 60.0f)
     {
+        Serial.print("Case 5 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
         for (int i = 0; i < 4; ++i)
         {
             waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(255, 255, 0));
@@ -76,8 +94,11 @@ void WaterLevelIndicatorMechanism::monitorFunction()
             waterLevelIndicator->show();
         }
     }
-    else if( sensorReadingValue >= 60 && sensorReadingValue < 70)
+    else if( sensorReadingValue >= 60.0f && sensorReadingValue < 70.0f)
     {
+        Serial.print("Case 6 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
         for (int i = 0; i < 5; ++i)
         {
             waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(255, 255, 0));
@@ -87,41 +108,50 @@ void WaterLevelIndicatorMechanism::monitorFunction()
             waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 0, 0));
             waterLevelIndicator->show();
         }
-        if(sensorReadingValue >= 70 && sensorReadingValue < 80)
+    }
+    else if(sensorReadingValue >= 70.0f && sensorReadingValue < 80.0f)
+    {
+        Serial.print("Case 7 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
+        for (int i = 0; i < 6; ++i)
         {
-            for (int i = 0; i < 6; ++i)
-            {
-                waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(255, 255, 0));
-            }
-            for (int i = 6; i < 8; ++i)
-            {
-                waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 0, 0));
-                waterLevelIndicator->show();
-            }
+            waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(255, 255, 0));
         }
-        else if(sensorReadingValue >= 80 && sensorReadingValue < 90)
+        for (int i = 6; i < 8; ++i)
         {
-            for (int i = 0; i < 7; ++i)
-            {
-                waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 255, 0));
-            }
-            for (int i = 3; i < 8; ++i)
-            {
-                waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 0, 0));
-                waterLevelIndicator->show();
-            }
-        }
-        else
-        {
-            for (int i = 0; i < 8; ++i)
-            {
-                waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 255, 0));
-                waterLevelIndicator->show();
-            }
+            waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 0, 0));
+            waterLevelIndicator->show();
         }
     }
-
+    else if(sensorReadingValue >= 80.0f && sensorReadingValue < 90.0f)
+    {
+        Serial.print("Case 8 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
+        for (int i = 0; i < 7; ++i)
+        {
+            waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 255, 0));
+        }
+        for (int i = 7; i < 8; ++i)
+        {
+            waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 0, 0));
+            waterLevelIndicator->show();
+        }
+    }
+    else
+    {
+        Serial.print("Case 9 ");
+        Serial.println(sensorReadingValue);
+        delay(50);
+        for (int i = 0; i < 8; ++i)
+        {
+            waterLevelIndicator->setPixelColor(i, waterLevelIndicator->Color(0, 255, 0));
+            waterLevelIndicator->show();
+        }
+    }
 }
+
 
 void WaterLevelIndicatorMechanism::turnOff()
 {
@@ -134,7 +164,7 @@ void WaterLevelIndicatorMechanism::turnOn()
 void WaterLevelIndicatorMechanism::init()
 {
     waterLevelIndicator->begin();
-    waterLevelIndicator->setBrightness(75);
+    waterLevelIndicator->setBrightness(30);
 }
 
 

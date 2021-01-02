@@ -38,7 +38,7 @@ std::shared_ptr<Sensor::SensorInterface> MechanismRepository::mapSensorToMechani
             return sensorRepo->findSensor(MeasurementType::SOIL_MOISTURE);
         case MechanismType::SPRINKLER:
             return sensorRepo->findSensor(MeasurementType::HUMIDIDY);
-        case MechanismType::WATTER_LEVEL:
+        case MechanismType::WATER_LEVEL:
             return sensorRepo->findSensor(MeasurementType::WATER_LEVEL);
         case MechanismType::UNKNOWN:
         default:

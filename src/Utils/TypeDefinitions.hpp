@@ -12,14 +12,14 @@ enum class MechanismType : std::uint8_t
     UNKNOWN = 255,
     IRRIGATION = 0,
     LIGHT = 1,
-    WATTER_LEVEL = 2,
+    WATER_LEVEL = 2,
     CRITICAL_WATTER_LEVEL = 3,
     SPRINKLER = 4,
 };
 
 static const std::vector<MechanismType> mechanismList = {MechanismType::IRRIGATION,
                                                          MechanismType::LIGHT,
-                                                         MechanismType::WATTER_LEVEL,
+                                                         MechanismType::WATER_LEVEL,
                                                          MechanismType::SPRINKLER};
 
 enum class MeasurementType : std::uint8_t

@@ -64,11 +64,12 @@ void ConnectionHandler::createUniqueName()
 
 void ConnectionHandler::runConnectionMonitorTask()
 {
+    serverClientService.reset(new Connection::ServerClientService(measSerializer, thresholdSerializer, accessPointName));
+    delay(500);
     xTaskCreate(&runConnectionMonitor, "Connection Measurements", stackSize, this, tskIDLE_PRIORITY, &taskHandle);
     delay(500);
     bluetoothService.reset( new Connection::BluetoothService(measSerializer, thresholdSerializer, taskHandle, accessPointName));
     wifiService.reset(new Connection::WiFiService(taskHandle));
-    serverClientService.reset(new Connection::ServerClientService(measSerializer, thresholdSerializer, accessPointName));
     hasCredentials = wifiService->getNewPreferences();
     if (hasCredentials)
     {
@@ -87,7 +88,7 @@ void ConnectionHandler::connectionMonitor()
 
     while(true)
     {
-        serverClientService->runLoop();
+//        serverClientService->runLoop();
         notifyResult = xTaskNotifyWait(0X00, ULONG_MAX, &notificationValue, taskDelay*5);
         isConnected = WiFi.isConnected();
 

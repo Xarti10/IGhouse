@@ -7,6 +7,7 @@ namespace IGHouse
 namespace Handlers
 {
 
+bool MechanismHandler::isTaskCreated = false;
 
 MechanismHandler::MechanismHandler(std::shared_ptr<MechanismRepository> &mechanismRepository,
                                    std::uint32_t stackDepth)
@@ -24,8 +25,11 @@ MechanismHandler::~MechanismHandler()
 
 void MechanismHandler::runMechanismMonitorTask()
 {
-    xTaskCreate(&runMechanismMonitor, "Sensor Measurements", stackSize, this, tskIDLE_PRIORITY, &taskHandle);
-    delay(1000);
+    if(!isTaskCreated)
+    {
+        xTaskCreate(&runMechanismMonitor, "Sensor Measurements", stackSize, this, tskIDLE_PRIORITY, &taskHandle);
+        delay(1000);
+    }
 }
 
 void MechanismHandler::runMechanismMonitor(void *params)
@@ -40,12 +44,18 @@ void MechanismHandler::runMechanismMonitor(void *params)
 
     while(true)
     {
+        vTaskDelay(taskDelay);
         for (const auto &mechanism : mechanismList)
         {
+            Serial.println(String("Number of mechanism in vector: " + String(mechanismList.size())));
+            if (mechanism == MechanismType::WATER_LEVEL)
+            {
+                delay(10);
+                Serial.println("Water lever indicator monitor function was called");
+                delay(10);
+            }
             triggerMechanismMonitor(mechanism);
         }
-
-        vTaskDelay(taskDelay);
     }
 }
 

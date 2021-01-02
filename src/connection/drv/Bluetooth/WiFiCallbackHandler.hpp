@@ -42,7 +42,7 @@ private:
     TaskHandle_t connectionTaskHandler;
     DynamicJsonDocument jsonBuffer;
 
-    void fillWiFiCredentials(JsonVariant arguments);
+    void fillWiFiCredentials();
     void eraseWiFiCredentials();
 };
 

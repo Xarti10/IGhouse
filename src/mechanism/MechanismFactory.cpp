@@ -27,7 +27,7 @@ std::shared_ptr<MechanismInterface> MechanismFactory::createMechanismDriver(Mech
         case MechanismType::SPRINKLER:
             Serial.println("SPRINKLER mechanism created");
             return std::make_shared<Drv::SprinklerMechanism>(mechanismType, sensorDrv, sprinklerMechanismPin);
-        case MechanismType::WATTER_LEVEL:
+        case MechanismType::WATER_LEVEL:
             Serial.println("WATTER_LEVEL mechanism created");
             return std::make_shared<Drv::WaterLevelIndicatorMechanism>(mechanismType, sensorDrv, waterLeverIndicatorPin);
         case MechanismType::UNKNOWN:

@@ -27,6 +27,7 @@ private:
     std::shared_ptr<MechanismRepository> mechanismRepo;
     std::uint32_t stackSize;
     TaskHandle_t taskHandle;
+    static bool isTaskCreated;
 
     static void runMechanismMonitor(void *params);
     void triggerMechanismMonitor(MechanismType mechType);

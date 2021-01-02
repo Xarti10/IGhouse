@@ -14,6 +14,7 @@ String ServerClientService::accessPointName = "";
 std::shared_ptr<MeasurementSerializer> ServerClientService::measSerializer;
 std::shared_ptr<ThresholdSerializer> ServerClientService::thresholdSerializer;
 std::shared_ptr<SocketIoClient> ServerClientService::webSocket;
+std::shared_ptr<WiFiClient> ServerClientService::client = std::make_shared<WiFiClient>();
 bool ServerClientService::isConnected = false;
 
 ServerClientService::ServerClientService(std::shared_ptr<MeasurementSerializer> &measurementSerializer,

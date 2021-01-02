@@ -54,11 +54,11 @@ WiFiCallbackHandler::WiFiCallbackHandler(std::shared_ptr<CipherAES> &cipher,
 {
 }
 
-void WiFiCallbackHandler::fillWiFiCredentials(JsonVariant arguments)
+void WiFiCallbackHandler::fillWiFiCredentials()
 {
     Serial.println(__FUNCTION__);
-    JsonVariant ssidFromJson = arguments["ssid"];
-    JsonVariant passwordFromJson = arguments["password"];
+    JsonVariant ssidFromJson = jsonBuffer["arguments"][0]["ssid"];
+    JsonVariant passwordFromJson = jsonBuffer["arguments"][0]["password"];
 
     if(ssidFromJson.isNull())
     {
@@ -107,13 +107,7 @@ void WiFiCallbackHandler::onWrite(BLECharacteristic *pCharacteristic)
                 case WiFiCommand::CONNECT_TO_WIFI:
                 {
                     Serial.println("Command CONNECT_TO_WIFI was called");
-                    JsonVariant arguments = jsonIn["arguments"][0];
-                    if(arguments.isNull())
-                    {
-                        Serial.println("No arumgents provided, could not connect to WiFi");
-                        return;
-                    }
-                    fillWiFiCredentials(arguments);
+                    fillWiFiCredentials();
                     break;
                 }
                 case WiFiCommand::ERASE:
